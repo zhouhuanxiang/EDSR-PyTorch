@@ -30,7 +30,7 @@ class REDS(srdata.SRData):
         if not self.train and not self.test_only:
             names_hr = names_hr[:100]
             names_lr = names_lr[:100]
-        print("######## dataset size {} ########".format(len(names_hr)))
+        print("######## REDS dataset size {} ########".format(len(names_hr)))
         return names_hr, names_lr
 
     def _set_filesystem(self, dir_data):
