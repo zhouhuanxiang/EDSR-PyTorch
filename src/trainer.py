@@ -37,7 +37,7 @@ class Trainer():
         self.model.train()
 
         timer_data, timer_model = utility.timer(), utility.timer()
-        for batch, (lr, hr, _, idx_scale) in enumerate(self.loader_train):
+        for batch, (lr, hr, _, _, idx_scale) in enumerate(self.loader_train):
             lr, hr = self.prepare(lr, hr)
             timer_data.hold()
             timer_model.tic()
@@ -84,7 +84,7 @@ class Trainer():
         for idx_data, d in enumerate(self.loader_test):
             for idx_scale, scale in enumerate(self.scale):
                 d.dataset.set_scale(idx_scale)
-                for lr, hr, filename, _ in tqdm(d, ncols=80):
+                for lr, hr, videoname, filename, _ in tqdm(d, ncols=80):
                     lr, hr = self.prepare(lr, hr)
                     sr = self.model(lr, idx_scale)
                     sr = utility.quantize(sr, self.args.rgb_range)
@@ -97,7 +97,7 @@ class Trainer():
                         save_list.extend([lr, hr])
 
                     if self.args.save_results:
-                        self.ckp.save_results(d, filename[0], save_list, scale)
+                        self.ckp.save_results(d, videoname[0], filename[0], save_list, scale)
 
                 self.ckp.log[-1, idx_data, idx_scale] /= len(d)
                 best = self.ckp.log.max(0)

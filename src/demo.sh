@@ -3,19 +3,18 @@
 nohup \
 python /home1/zhx/video-restoration/codes/EDSR-PyTorch/src/main.py \
 --dir_data /home1/zhx/video-restoration/data \
---data_train KWAIVIDEO \
---data_test KWAIVIDEO \
---n_GPUs 4 --used_GPUs 0 6 7 8 \
---data_range 1-34700/34701-34940 \
+--data_train REDS+KWAIVIDEO \
+--data_test REDS+KWAIVIDEO \
+--n_GPUs 4 --used_GPUs 0 7 8 9 \
 --ext img \
 --scale 1 \
---patch_size 192 \
---batch_size 128 \
---model EDSR \
---save /home1/zhx/log \
+--patch_size 96 \
+--batch_size 32 \
+--model RCAN \
+--save /home1/zhx/log/RCAN \
 --save_results \
---save_gt \
-> /home1/zhx/edsr 2>&1 &
+--test_every 1000 \
+> /home1/zhx/RCAN 2>&1 &
 
 nohup \
 python ~/zhouhuanxiang/video-restoration/codes/EDSR-PyTorch/src/main.py \

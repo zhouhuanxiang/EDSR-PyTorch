@@ -145,14 +145,19 @@ class checkpoint():
         while not self.queue.empty(): time.sleep(1)
         for p in self.process: p.join()
 
-    def save_results(self, dataset, filename, save_list, scale):
+    def save_results(self, dataset, videoname, filename, save_list, scale):
         if self.args.save_results:
+            os.makedirs(self.get_path(
+                'results-{}'.format(dataset.dataset.name),
+                '{}'.format(videoname)
+            ), exist_ok=True)
             filename = self.get_path(
                 'results-{}'.format(dataset.dataset.name),
+                '{}'.format(videoname),
                 '{}_x{}_'.format(filename, scale)
             )
 
-            postfix = ('SR', 'LR', 'HR')
+            postfix = ('Result', 'Compressed', 'GT')
             for v, p in zip(save_list, postfix):
                 normalized = v[0].mul(255 / self.args.rgb_range)
                 tensor_cpu = normalized.byte().permute(1, 2, 0).cpu()

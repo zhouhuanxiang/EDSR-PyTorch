@@ -21,6 +21,8 @@ class SRData(data.Dataset):
         self.input_large = (args.model == 'VDSR')
         self.scale = args.scale
         self.idx_scale = 0
+        # modified cfgs
+        self.test_only = args.test_only
         
         self._set_filesystem(args.dir_data)
         if args.ext.find('img') < 0:
@@ -31,6 +33,8 @@ class SRData(data.Dataset):
         if args.ext.find('img') >= 0 or benchmark:
             self.images_hr, self.images_lr = list_hr, list_lr
         elif args.ext.find('sep') >= 0:
+            # todo
+            # change scale from [] -> int
             os.makedirs(
                 self.dir_hr.replace(self.apath, path_bin),
                 exist_ok=True
@@ -96,12 +100,12 @@ class SRData(data.Dataset):
                 pickle.dump(imageio.imread(img), _f)
 
     def __getitem__(self, idx):
-        lr, hr, filename = self._load_file(idx)
+        lr, hr, videoname, filename = self._load_file(idx)
         pair = self.get_patch(lr, hr)
         pair = common.set_channel(*pair, n_channels=self.args.n_colors)
         pair_t = common.np2Tensor(*pair, rgb_range=self.args.rgb_range)
 
-        return pair_t[0], pair_t[1], filename
+        return pair_t[0], pair_t[1], videoname, filename
 
     def __len__(self):
         if self.train:
@@ -120,6 +124,7 @@ class SRData(data.Dataset):
         f_hr = self.images_hr[idx]
         f_lr = self.images_lr[self.idx_scale][idx]
 
+        videoname =  f_hr.split('/')[-2]
         filename, _ = os.path.splitext(os.path.basename(f_hr))
         if self.args.ext == 'img' or self.benchmark:
             hr = imageio.imread(f_hr)
@@ -130,7 +135,7 @@ class SRData(data.Dataset):
             with open(f_lr, 'rb') as _f:
                 lr = pickle.load(_f)
 
-        return lr, hr, filename
+        return lr, hr, videoname, filename
 
     def get_patch(self, lr, hr):
         scale = self.scale[self.idx_scale]
