@@ -13,7 +13,6 @@ python /home1/zhx/video-restoration/codes/EDSR-PyTorch/src/main.py \
 --model RCAN \
 --save /home1/zhx/log/RCAN \
 --save_results \
---test_every 1000 \
 > /home1/zhx/RCAN 2>&1 &
 
 nohup \
