@@ -61,7 +61,7 @@ if __name__ == '__main__':
     
     mode = 'lab' if socket.gethostname() == 'user-ubuntu' else 'kwai'
     if mode == 'kwai':
-        prefix = '/media/disk1/fordata/web_server/zhouhuanxiang/data'
+        prefix = '/media/disk5/fordata/web_server/zhouhuanxiang/data'
         ffmpeg = '/usr/local/share/ffmpeg_qlh/bin/ffmpeg '
     else:
         prefix = '../../../data'

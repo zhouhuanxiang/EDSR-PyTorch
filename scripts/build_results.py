@@ -45,12 +45,12 @@ if mode == 'lab':
     ffmpeg = 'ffmpeg '
 else:
     result_src_folders = [
-        '/home/wev_server/zhouhuanxiang/log/'+model+'/results-REDS',
-        '/home/wev_server/zhouhuanxiang/log/'+model+'/results-KWAIVIDEO',
+        '/home/web_server/zhouhuanxiang/log/'+model+'/results-REDS',
+        '/home/web_server/zhouhuanxiang/log/'+model+'/results-KWAIVIDEO',
     ]
     result_dst_folders = [
-        '/home/wev_server/zhouhuanxiang/log/'+model+'/videos-REDS',
-        '/home/wev_server/zhouhuanxiang/log/'+model+'/videos-KWAIVIDEO',
+        '/home/web_server/zhouhuanxiang/log/'+model+'/videos-REDS',
+        '/home/web_server/zhouhuanxiang/log/'+model+'/videos-KWAIVIDEO',
     ]
     ffmpeg = '/usr/local/share/ffmpeg_qlh/bin/ffmpeg '
 

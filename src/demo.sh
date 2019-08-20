@@ -17,7 +17,6 @@ python /home1/zhx/video-restoration/codes/EDSR-PyTorch/src/main.py \
 --load /home1/zhx/log/RCAN \
 --resume -1 \
 --test_only \
---save_gt \
 > /home1/zhx/RCAN 2>&1 &
 
 
@@ -40,7 +39,7 @@ python /home1/zhx/video-restoration/codes/EDSR-PyTorch/src/main.py \
 ################
 nohup \
 python ~/zhouhuanxiang/video-restoration/codes/EDSR-PyTorch/src/main.py \
---dir_data /media/disk1/fordata/web_server/zhouhuanxiang/data \
+--dir_data /media/disk5/fordata/web_server/zhouhuanxiang/data \
 --data_train KWAIVIDEO \
 --data_test KWAIVIDEO \
 --data_range 1-27500/27501-27600 \
@@ -49,9 +48,12 @@ python ~/zhouhuanxiang/video-restoration/codes/EDSR-PyTorch/src/main.py \
 --patch_size 192 \
 --batch_size 32 \
 --model EDSR \
---save ~/zhouhuanxiang/log \
+--save /media/disk5/fordata/web_server/zhouhuanxiang/log/EDSR \
 --save_results \
 --test_every 4000 \
+--load /media/disk5/fordata/web_server/zhouhuanxiang/log/EDSR \
+--resume -1 \
+--test_only \
 > ~/zhouhuanxiang/edsr 2>&1 &
 
 

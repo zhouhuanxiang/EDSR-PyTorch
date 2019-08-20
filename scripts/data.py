@@ -22,9 +22,9 @@ import socket
 
 mode = 'lab' if socket.gethostname() == 'user-ubuntu' else 'kwai'
 if mode == 'kwai':
-	prefix = '/media/disk1/fordata/web_server/zhouhuanxiang/data'
+	prefix = '/media/disk5/fordata/web_server/zhouhuanxiang/data'
 	ffmpeg = '/usr/local/share/ffmpeg_qlh/bin/ffmpeg '
-	dest = '/media/disk1/fordata/web_server/zhouhuanxiang/data/'
+	dest = '/media/disk5/fordata/web_server/zhouhuanxiang/data/'
 else:
 	prefix = '../../../data'
 	ffmpeg = 'ffmpeg '
