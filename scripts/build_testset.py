@@ -43,7 +43,7 @@ dataset_dirs = [
 
 mode = 'lab'
 if mode == 'kwai':
-    prefix = ''
+    prefix = '/media/disk1/fordata/web_server/zhouhuanxiang/data'
 else:
     prefix = '../data'
 
@@ -53,7 +53,7 @@ for i, dataset in enumerate(dataset_dirs):
             os.mkdir(os.path.join(prefix, d+'_raw_test'))
         for v in test_video_ids[i]:
             # delete the video raw frames from train set
-            if os.path.exists(os.path.join(prefix, d, v)):
+            if os.path.exists(os.path.join(prefix, d+'_raw', v)):
                 print('deleting video {} from trainset'.format(os.path.join(prefix, d+'_raw', v)))
                 os.system('rm -rf '+os.path.join(prefix, d+'_raw', v))
             src_path = os.path.join(prefix, d, v+'.mp4')

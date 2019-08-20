@@ -4,17 +4,40 @@ nohup \
 python /home1/zhx/video-restoration/codes/EDSR-PyTorch/src/main.py \
 --dir_data /home1/zhx/video-restoration/data \
 --data_train REDS+KWAIVIDEO \
---data_test REDS+KWAIVIDEO \
+--data_test KWAIVIDEO+REDS \
 --n_GPUs 4 --used_GPUs 0 7 8 9 \
 --ext img \
 --scale 1 \
 --patch_size 96 \
---batch_size 32 \
+--batch_size 4 \
 --model RCAN \
 --save /home1/zhx/log/RCAN \
 --save_results \
+--test_every 4000 \
+--load /home1/zhx/log/RCAN \
+--resume -1 \
+--test_only \
+--save_gt \
 > /home1/zhx/RCAN 2>&1 &
 
+
+python /home1/zhx/video-restoration/codes/EDSR-PyTorch/src/main.py \
+--dir_data /home1/zhx/video-restoration/data \
+--data_train REDS+KWAIVIDEO \
+--data_test REDS+KWAIVIDEO \
+--n_GPUs 1 --used_GPUs 3 \
+--ext img \
+--scale 1 \
+--patch_size 48 \
+--batch_size 8 \
+--model RCAN \
+--save /home1/zhx/log/TEST \
+--save_results \
+--test_every 4000 \
+--load /home1/zhx/log/RCAN \
+--resume -1
+
+################
 nohup \
 python ~/zhouhuanxiang/video-restoration/codes/EDSR-PyTorch/src/main.py \
 --dir_data /media/disk1/fordata/web_server/zhouhuanxiang/data \
@@ -28,7 +51,7 @@ python ~/zhouhuanxiang/video-restoration/codes/EDSR-PyTorch/src/main.py \
 --model EDSR \
 --save ~/zhouhuanxiang/log \
 --save_results \
---save_gt
+--test_every 4000 \
 > ~/zhouhuanxiang/edsr 2>&1 &
 
 
