@@ -32,24 +32,25 @@ test_video_ids = [
 ]
 
 mode = 'lab' if socket.gethostname() == 'user-ubuntu' else 'kwai'
+model = 'EDSR'
 if mode == 'lab':
     result_src_folders = [
-        '/home1/zhx/log/RCAN/results-REDS',
-        '/home1/zhx/log/RCAN/results-KWAIVIDEO',
+        '/home1/zhx/log/'+model+'/results-REDS',
+        '/home1/zhx/log/'+model+'/results-KWAIVIDEO',
     ]
     result_dst_folders = [
-        '/home1/zhx/log/RCAN/videos-REDS/',
-        '/home1/zhx/log/RCAN/videos-KWAIVIDEO/'
+        '/home1/zhx/log/'+model+'/videos-REDS/',
+        '/home1/zhx/log/'+model+'/videos-KWAIVIDEO/'
     ]
     ffmpeg = 'ffmpeg '
 else:
     result_src_folders = [
-        '~/zhouhuanxiang/log/RCAN/results-REDS',
-        '~/zhouhuanxiang/log/RCAN/results-KWAIVIDEO',
+        '/home/wev_server/zhouhuanxiang/log/'+model+'/results-REDS',
+        '/home/wev_server/zhouhuanxiang/log/'+model+'/results-KWAIVIDEO',
     ]
     result_dst_folders = [
-        '~/zhouhuanxiang/log/RCAN/videos-REDS',
-        '~/zhouhuanxiang/log/RCAN/videos-KWAIVIDEO',
+        '/home/wev_server/zhouhuanxiang/log/'+model+'/videos-REDS',
+        '/home/wev_server/zhouhuanxiang/log/'+model+'/videos-KWAIVIDEO',
     ]
     ffmpeg = '/usr/local/share/ffmpeg_qlh/bin/ffmpeg '
 
@@ -62,7 +63,7 @@ for i, folder in enumerate(result_src_folders):
         path = os.path.join(result_src_folders[i], vname)
         os.chdir(path)
         print(path)
-        os.system(ffmpeg+'-i img_%5d_x1_GT.png -movflags +faststart -max_interleave_delta 150000000 -max_muxing_queue_size 9999 -c:v libx265 -psnr -threads 6 -preset fast -c:a copy -profile:a aac_he -ac 2 -x265-params lossless=1  -tag:v hvc1  -pix_fmt yuv420p -y '+os.path.join(result_dst_folders[i], vname+'_high.mp4'))
-        os.system(ffmpeg+'-i img_%5d_x1_Compressed.png -movflags +faststart -max_interleave_delta 150000000 -max_muxing_queue_size 9999 -c:v libx265 -psnr -threads 6 -preset fast -c:a copy -profile:a aac_he -ac 2 -x265-params lossless=1  -tag:v hvc1  -pix_fmt yuv420p -y '+os.path.join(result_dst_folders[i], vname+'_high.mp4'))
-        os.system(ffmpeg+'-i img_%5d_x1_Result.png -movflags +faststart -max_interleave_delta 150000000 -max_muxing_queue_size 9999 -c:v libx265 -psnr -threads 6 -preset fast -c:a copy -profile:a aac_he -ac 2 -x265-params lossless=1  -tag:v hvc1  -pix_fmt yuv420p -y '+os.path.join(result_dst_folders[i], vname+'_high.mp4'))
+        # os.system(ffmpeg+'-i img_%5d_x1_GT.png -movflags +faststart -max_interleave_delta 150000000 -max_muxing_queue_size 9999 -c:v libx265 -psnr -threads 6 -preset fast -c:a copy -profile:a aac_he -ac 2 -x265-params lossless=1  -tag:v hvc1  -pix_fmt yuv420p -y '+os.path.join(result_dst_folders[i], vname+'_high.mp4'))
+        # os.system(ffmpeg+'-i img_%5d_x1_Compressed.png -movflags +faststart -max_interleave_delta 150000000 -max_muxing_queue_size 9999 -c:v libx265 -psnr -threads 6 -preset fast -c:a copy -profile:a aac_he -ac 2 -x265-params lossless=1  -tag:v hvc1  -pix_fmt yuv420p -y '+os.path.join(result_dst_folders[i], vname+'_high.mp4'))
+        os.system(ffmpeg+'-i img_%5d_x1_Result.png -movflags +faststart -max_interleave_delta 150000000 -max_muxing_queue_size 9999 -c:v libx265 -psnr -threads 6 -preset fast -c:a copy -profile:a aac_he -ac 2 -x265-params lossless=1  -tag:v hvc1  -pix_fmt yuv420p -y '+os.path.join(result_dst_folders[i], vname+'.mp4'))
 os.chdir(path_now)
