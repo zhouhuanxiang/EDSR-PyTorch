@@ -18,13 +18,17 @@ import os
 # 		line = fp.readline()
 
 import os
+import socket
 
-env = 'kwai'
-
-if env == 'kwai':
+mode = 'lab' if socket.gethostname() == 'user-ubuntu' else 'kwai'
+if mode == 'kwai':
 	prefix = '/media/disk1/fordata/web_server/zhouhuanxiang/data'
+	ffmpeg = '/usr/local/share/ffmpeg_qlh/bin/ffmpeg '
+	dest = '/media/disk1/fordata/web_server/zhouhuanxiang/data/'
 else:
-	prefix = '../data_new'
+	prefix = '../../../data'
+	ffmpeg = 'ffmpeg '
+	dest = '/home1/zhx/video-restoration/data_new/'
 
 for crf in [25, 45]:
 	datasets = [['HD_UGC', 'HD_UGC_crf'], ['REDS', 'REDS_crf']]
@@ -39,11 +43,4 @@ for crf in [25, 45]:
 				continue
 			fname=file.split(".")[0]
 			print('Compressing video {} ...'.format(fname))
-			if env == 'kwai':
-				os.system("/usr/local/share/ffmpeg_qlh/bin/ffmpeg -i /media/disk1/fordata/web_server/zhouhuanxiang/data/"+dataset[0]+"/"+fname+".mp4 -movflags +faststart -max_interleave_delta 150000000 -max_muxing_queue_size 9999 -c:v libx265 -psnr -threads 16 -preset fast -c:a copy -profile:a aac_he -ac 2 -crf "+str(crf)+" -x265-params psnr=1:ssim=1:fakeparams=no  -tag:v hvc1  -pix_fmt yuv420p -y "+dst_path+"/"+fname+".mp4")
-			else:
-				os.system("ffmpeg -i /home1/zhx/video-restoration/data_new/"+dataset[0]+"/"+fname+".mp4 -movflags +faststart -max_interleave_delta 150000000 -max_muxing_queue_size 9999 -c:v libx265 -psnr -threads 16 -preset fast -c:a copy -profile:a aac_he -ac 2 -crf "+str(crf)+" -x265-params psnr=1:ssim=1:fakeparams=no  -tag:v hvc1  -pix_fmt yuv420p -y "+dst_path+"/"+fname+".mp4")
-				
-
-
-
+			os.system(ffmpeg+"-i "+dest+dataset[0]+"/"+fname+".mp4 -movflags +faststart -max_interleave_delta 150000000 -max_muxing_queue_size 9999 -c:v libx265 -psnr -threads 16 -preset fast -c:a copy -profile:a aac_he -ac 2 -crf "+str(crf)+" -x265-params psnr=1:ssim=1:fakeparams=no  -tag:v hvc1  -pix_fmt yuv420p -y "+dst_path+"/"+fname+".mp4")

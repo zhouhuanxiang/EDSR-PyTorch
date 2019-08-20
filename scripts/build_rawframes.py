@@ -7,6 +7,7 @@ from pipes import quote
 from multiprocessing import Pool, current_process
 
 import cv2
+import socket
 
 
 def dump_frames(vid_item):
@@ -19,10 +20,7 @@ def dump_frames(vid_item):
         pass
 
     # Read frame by ffmpeg
-    if args.env == 'kwai':
-        os.system('/usr/local/share/ffmpeg_qlh/bin/ffmpeg -i '+full_path+' -vf fps=5 '+out_full_path+'/img_%05d.png -hide_banner')
-    else:
-        os.system('ffmpeg -i '+full_path+' -vf fps=5 '+out_full_path+'/img_%05d.png -hide_banner')        
+    os.system(ffmpeg+'-i '+full_path+' -vf fps=5 '+out_full_path+'/img_%05d.png -hide_banner')
     
     ## Read frames by opencv
     # video = cv2.VideoCapture(full_path) 
@@ -41,8 +39,6 @@ def dump_frames(vid_item):
 
 def parse_args():
     parser = argparse.ArgumentParser(description='extract raw frames')
-    parser.add_argument('--env', type=str, default='kwai',
-                        help='kwai or lab')
     parser.add_argument('--num_worker', type=int, default=8)
     parser.add_argument('--path', nargs='+', 
                         help='path(s) of video folder to be extracted')
@@ -63,10 +59,13 @@ python build_rawframes.py --path HD_UGC_crf25 HD_UGC_crf45
 if __name__ == '__main__':
     args = parse_args()
     
-    if args.env == 'kwai':
+    mode = 'lab' if socket.gethostname() == 'user-ubuntu' else 'kwai'
+    if mode == 'kwai':
         prefix = '/media/disk1/fordata/web_server/zhouhuanxiang/data'
+        ffmpeg = '/usr/local/share/ffmpeg_qlh/bin/ffmpeg '
     else:
-        prefix = '../data_new'
+        prefix = '../../../data'
+        ffmpeg = 'ffmpeg '
 
     for path in args.path:
         src_dir = osp.join(prefix, path)

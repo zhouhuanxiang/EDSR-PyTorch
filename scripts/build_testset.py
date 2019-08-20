@@ -1,4 +1,5 @@
 import os
+import socket
 
 test_video_ids = [
     # REDS
@@ -41,11 +42,13 @@ dataset_dirs = [
     ]
 ]
 
-mode = 'lab'
+mode = 'lab' if socket.gethostname() == 'user-ubuntu' else 'kwai'
 if mode == 'kwai':
     prefix = '/media/disk1/fordata/web_server/zhouhuanxiang/data'
+    ffmpeg = '/usr/local/share/ffmpeg_qlh/bin/ffmpeg '
 else:
-    prefix = '../data'
+    prefix = '../../../data'
+    ffmpeg = 'ffmpeg '
 
 for i, dataset in enumerate(dataset_dirs):
     for d in dataset:
@@ -60,9 +63,6 @@ for i, dataset in enumerate(dataset_dirs):
             dst_path = os.path.join(prefix, d+'_raw_test', v)
             if not os.path.exists(dst_path):
                 os.mkdir(dst_path)
-            if mode == 'kwai':
-                os.system('/usr/local/share/ffmpeg_qlh/bin/ffmpeg -i '+src_path+' '+dst_path+'/img_%05d.png -hide_banner')
-            else:
-                os.system('ffmpeg -i '+src_path+' '+dst_path+'/img_%05d.png -hide_banner')        
+            os.system(ffmpeg+'-i '+src_path+' '+dst_path+'/img_%05d.png -hide_banner')      
     
 
