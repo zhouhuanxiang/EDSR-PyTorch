@@ -25,6 +25,8 @@ class Model(nn.Module):
 
         module = import_module('model.' + args.model.lower())
         self.model = module.make_model(args).to(self.device)
+        # self.model = module.make_model(args)
+        # self.model = nn.DataParallel(self.model, self.used_GPUs)
         if args.precision == 'half':
             self.model.half()
 
@@ -43,8 +45,8 @@ class Model(nn.Module):
 
         if self.training:
             if self.n_GPUs > 1:
-                # return P.data_parallel(self.model, x, range(self.n_GPUs))
-                return P.data_parallel(self.model, x, self.used_GPUs)
+                return P.data_parallel(self.model, x, range(self.n_GPUs))
+                # return P.data_parallel(self.model, x, self.used_GPUs)
             else:
                 return self.model(x)
         else:

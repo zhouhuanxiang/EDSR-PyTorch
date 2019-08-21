@@ -1,5 +1,13 @@
+EDSR RCAN
+
+(n_resblocks, patch_size) =
+    (16, 96),
+    (8, 96),
+    (16, 48),
+    (8, 96)
+
 # 2019.8.14 
-# 15646261055
+# RCAN r16p96 on lab
 nohup \
 python /home1/zhx/video-restoration/codes/EDSR-PyTorch/src/main.py \
 --dir_data /home1/zhx/video-restoration/data \
@@ -11,49 +19,155 @@ python /home1/zhx/video-restoration/codes/EDSR-PyTorch/src/main.py \
 --patch_size 96 \
 --batch_size 4 \
 --model RCAN \
---save /home1/zhx/log/RCAN \
+--save /home1/zhx/log/RCAN_r16 \
 --save_results \
 --test_every 4000 \
---load /home1/zhx/log/RCAN \
+--load /home1/zhx/log/RCAN_r16 \
 --resume -1 \
 --test_only \
 > /home1/zhx/RCAN 2>&1 &
 
-
+## here !!! 2019.8.20
+# EDSR r8p96 on 166.111.80.18
+CUDA_VISIBLE_DEVICES=0 nohup \
 python /home1/zhx/video-restoration/codes/EDSR-PyTorch/src/main.py \
 --dir_data /home1/zhx/video-restoration/data \
 --data_train REDS+KWAIVIDEO \
---data_test REDS+KWAIVIDEO \
---n_GPUs 1 --used_GPUs 3 \
+--data_test KWAIVIDEO+REDS \
+--crf 25 \
+--n_GPUs 1  \
 --ext img \
 --scale 1 \
---patch_size 48 \
---batch_size 8 \
---model RCAN \
---save /home1/zhx/log/TEST \
+--patch_size 96 \
+--n_resblocks 8 \
+--batch_size 64 \
+--model EDSR \
+--save /home1/zhx/log/EDSR_r8_crf25 \
 --save_results \
---test_every 4000 \
---load /home1/zhx/log/RCAN \
---resume -1
+--test_every 1000 \
+--load /home1/zhx/log/EDSR_r8_crf25 \
+--resume -1 \
+--test_only \
+> /home1/zhx/EDSR_r8_crf25 2>&1 &
+
+CUDA_VISIBLE_DEVICES=1 nohup \
+python /home1/zhx/video-restoration/codes/EDSR-PyTorch/src/main.py \
+--dir_data /home1/zhx/video-restoration/data \
+--data_train REDS+KWAIVIDEO \
+--data_test KWAIVIDEO+REDS \
+--crf 30 \
+--n_GPUs 1  \
+--ext img \
+--scale 1 \
+--patch_size 96 \
+--n_resblocks 8 \
+--batch_size 64 \
+--model EDSR \
+--save /home1/zhx/log/EDSR_r8_crf30 \
+--save_results \
+--test_every 1000 \
+--load /home1/zhx/log/EDSR_r8_crf30 \
+--resume -1 \
+--test_only \
+> /home1/zhx/EDSR_r8_crf30 2>&1 &
+
+CUDA_VISIBLE_DEVICES=2 nohup \
+python /home1/zhx/video-restoration/codes/EDSR-PyTorch/src/main.py \
+--dir_data /home1/zhx/video-restoration/data \
+--data_train REDS+KWAIVIDEO \
+--data_test KWAIVIDEO+REDS \
+--crf 35 \
+--n_GPUs 1  \
+--ext img \
+--scale 1 \
+--patch_size 96 \
+--n_resblocks 8 \
+--batch_size 64 \
+--model EDSR \
+--save /home1/zhx/log/EDSR_r8_crf35 \
+--save_results \
+--test_every 1000 \
+--load /home1/zhx/log/EDSR_r8_crf35 \
+--resume -1 \
+--test_only \
+> /home1/zhx/EDSR_r8_crf35 2>&1 &
+
+CUDA_VISIBLE_DEVICES=3 nohup \
+python /home1/zhx/video-restoration/codes/EDSR-PyTorch/src/main.py \
+--dir_data /home1/zhx/video-restoration/data \
+--data_train REDS+KWAIVIDEO \
+--data_test KWAIVIDEO+REDS \
+--crf 40 \
+--n_GPUs 1  \
+--ext img \
+--scale 1 \
+--patch_size 96 \
+--n_resblocks 8 \
+--batch_size 64 \
+--model EDSR \
+--save /home1/zhx/log/EDSR_r8_crf40 \
+--save_results \
+--test_every 1000 \
+--load /home1/zhx/log/EDSR_r8_crf40 \
+--resume -1 \
+--test_only \
+> /home1/zhx/EDSR_r8_crf40 2>&1 &
+
+nohup \
+CUDA_VISIBLE_DEVICES=3 python /home1/zhx/video-restoration/codes/EDSR-PyTorch/src/main.py \
+--dir_data /home1/zhx/video-restoration/data \
+--data_train REDS+KWAIVIDEO \
+--data_test KWAIVIDEO+REDS \
+--crf 45 \
+--n_GPUs 1  \
+--ext img \
+--scale 1 \
+--patch_size 96 \
+--n_resblocks 8 \
+--batch_size 64 \
+--model EDSR \
+--save /home1/zhx/log/EDSR_r8_crf45 \
+--save_results \
+--test_every 1000 \
+> /home1/zhx/EDSR_r8_crf45 2>&1 &
+
 
 ################
+# EDSR r16p96 on kwai
 nohup \
 python ~/zhouhuanxiang/video-restoration/codes/EDSR-PyTorch/src/main.py \
 --dir_data /media/disk5/fordata/web_server/zhouhuanxiang/data \
---data_train KWAIVIDEO \
---data_test KWAIVIDEO \
---data_range 1-27500/27501-27600 \
+--data_train KWAIVIDEO+REDS \
+--data_test KWAIVIDEO+REDS \
+--n_GPUs 4 --used_GPUs 0 7 8 9 \
 --ext img \
 --scale 1 \
 --patch_size 192 \
 --batch_size 32 \
 --model EDSR \
---save /media/disk5/fordata/web_server/zhouhuanxiang/log/EDSR \
+--save /media/disk5/fordata/web_server/zhouhuanxiang/log/EDSR_r16 \
 --save_results \
 --test_every 4000 \
---load /media/disk5/fordata/web_server/zhouhuanxiang/log/EDSR \
+--load /media/disk5/fordata/web_server/zhouhuanxiang/log/EDSR_r16 \
 --resume -1 \
 --test_only \
+> ~/zhouhuanxiang/edsr 2>&1 &
+# EDSR r8p96 on kwai
+nohup \
+python ~/zhouhuanxiang/video-restoration/codes/EDSR-PyTorch/src/main.py \
+--dir_data /media/disk5/fordata/web_server/zhouhuanxiang/data \
+--data_train KWAIVIDEO+REDS \
+--data_test KWAIVIDEO+REDS \
+--n_GPUs 4 --used_GPUs 0 7 8 9 \
+--ext img \
+--scale 1 \
+--patch_size 192 \
+--n_resblocks 8 \
+--batch_size 32 \
+--model EDSR \
+--save /media/disk5/fordata/web_server/zhouhuanxiang/log/EDSR_r8 \
+--save_results \
+--test_every 4000 \
 > ~/zhouhuanxiang/edsr 2>&1 &
 
 

@@ -3,6 +3,10 @@ import template
 
 parser = argparse.ArgumentParser(description='EDSR and MDSR')
 
+# add by zhx
+parser.add_argument('--crf', type=str, default='25',
+                    help='crf config')
+
 parser.add_argument('--debug', action='store_true',
                     help='Enables debug mode')
 parser.add_argument('--template', default='.',

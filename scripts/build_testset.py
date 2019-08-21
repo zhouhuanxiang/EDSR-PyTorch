@@ -33,16 +33,25 @@ test_video_ids = [
 
 dataset_dirs = [
     [
-        'REDS_crf25',
-        'REDS_crf45'
+        # 'REDS',
+        # 'REDS_crf25',
+        # 'REDS_crf30',
+        # 'REDS_crf35',
+        'REDS_crf40',
+        # 'REDS_crf45',
     ],
     [
-        'HD_UGC_crf25',
-        'HD_UGC_crf45'
+        # 'HD_UGC',
+        # 'HD_UGC_crf25',
+        # 'HD_UGC_crf30',
+        # 'HD_UGC_crf35',
+        'HD_UGC_crf40',
+        # 'HD_UGC_crf45',
     ]
 ]
 
-mode = 'lab' if socket.gethostname() == 'user-ubuntu' else 'kwai'
+mode = 'lab' if socket.gethostname() == 'user-ubuntu' or socket.gethostname() == 'ubuntu' else 'kwai'
+
 if mode == 'kwai':
     prefix = '/media/disk5/fordata/web_server/zhouhuanxiang/data'
     ffmpeg = '/usr/local/share/ffmpeg_qlh/bin/ffmpeg '

@@ -3,7 +3,6 @@ from model import common
 import torch.nn as nn
 
 url = {
-    'r16f64x1': '',
     'r16f64x2': 'https://cv.snu.ac.kr/research/EDSR/models/edsr_baseline_x2-1bc95232.pt',
     'r16f64x3': 'https://cv.snu.ac.kr/research/EDSR/models/edsr_baseline_x3-abf2a44e.pt',
     'r16f64x4': 'https://cv.snu.ac.kr/research/EDSR/models/edsr_baseline_x4-6b446fab.pt',
@@ -24,7 +23,7 @@ class EDSR(nn.Module):
         kernel_size = 3 
         scale = args.scale[0]
         act = nn.ReLU(True)
-        self.url = url['r{}f{}x{}'.format(n_resblocks, n_feats, scale)]
+        # self.url = url['r{}f{}x{}'.format(n_resblocks, n_feats, scale)]
         self.sub_mean = common.MeanShift(args.rgb_range)
         self.add_mean = common.MeanShift(args.rgb_range, sign=1)
 

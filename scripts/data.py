@@ -20,17 +20,17 @@ import os
 import os
 import socket
 
-mode = 'lab' if socket.gethostname() == 'user-ubuntu' else 'kwai'
+mode = 'lab' if socket.gethostname() == 'user-ubuntu' or socket.gethostname() == 'ubuntu' else 'kwai'
 if mode == 'kwai':
 	prefix = '/media/disk5/fordata/web_server/zhouhuanxiang/data'
 	ffmpeg = '/usr/local/share/ffmpeg_qlh/bin/ffmpeg '
 	dest = '/media/disk5/fordata/web_server/zhouhuanxiang/data/'
 else:
-	prefix = '../../../data'
+	prefix = '/home1/zhx/video-restoration/data/'
 	ffmpeg = 'ffmpeg '
-	dest = '/home1/zhx/video-restoration/data_new/'
+	dest = '/home1/zhx/video-restoration/data/'
 
-for crf in [25, 45]:
+for crf in [30, 35, 40]:
 	datasets = [['HD_UGC', 'HD_UGC_crf'], ['REDS', 'REDS_crf']]
 	for dataset in datasets:
 		src_path = os.path.join(prefix, dataset[0])

@@ -5,6 +5,7 @@ from decimal import Decimal
 import utility
 
 import torch
+import torch.nn as nn
 import torch.nn.utils as utils
 from tqdm import tqdm
 
@@ -24,6 +25,8 @@ class Trainer():
             self.optimizer.load(ckp.dir, epoch=len(ckp.log))
 
         self.error_last = 1e8
+        #
+        self.used_GPUs = args.used_GPUs
 
     def train(self):
         self.loss.step()
@@ -131,6 +134,7 @@ class Trainer():
         def _prepare(tensor):
             if self.args.precision == 'half': tensor = tensor.half()
             return tensor.to(device)
+            # return nn.DataParallel(tensor, self.used_GPUs)
 
         return [_prepare(a) for a in args]
 

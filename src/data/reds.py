@@ -4,6 +4,10 @@ from data import srdata
 
 class REDS(srdata.SRData):
     def __init__(self, args, name='REDS', train=True, benchmark=False):
+        #  modify some cfgs
+        self.input_large = True
+        self.crf = args.crf
+
         data_range = [r.split('-') for r in args.data_range.split('/')]
         if train:
             data_range = data_range[0]
@@ -17,8 +21,6 @@ class REDS(srdata.SRData):
         super(REDS, self).__init__(
             args, name=name, train=train, benchmark=benchmark
         )
-        #  modify some cfgs
-        self.input_large = True
 
     def _scan(self):
         names_hr = sorted(
@@ -26,7 +28,7 @@ class REDS(srdata.SRData):
         )
         names_lr = [[] for _ in self.scale]
         for si, s in enumerate(self.scale):
-            names_lr[si] = sorted([i.replace('REDS_crf25_raw', 'REDS_crf45_raw') for i in names_hr])
+            names_lr[si] = sorted([i.replace('REDS_raw', 'REDS_crf'+self.crf+'_raw') for i in names_hr])
         if not self.train and not self.test_only:
             names_hr = names_hr[:100]
             names_lr = names_lr[:100]
@@ -40,10 +42,10 @@ class REDS(srdata.SRData):
         # if self.input_large: self.dir_lr += 'L'
         self.apath = dir_data
         if self.train:
-            self.dir_hr = os.path.join(self.apath, 'REDS_crf25_raw')
-            self.dir_lr = os.path.join(self.apath, 'REDS_crf45_raw')
+            self.dir_hr = os.path.join(self.apath, 'REDS_raw')
+            self.dir_lr = os.path.join(self.apath, 'REDS_crf'+self.crf+'_raw')
         else:
-            self.dir_hr = os.path.join(self.apath, 'REDS_crf25_raw_test')
-            self.dir_lr = os.path.join(self.apath, 'REDS_crf45_raw_test')
+            self.dir_hr = os.path.join(self.apath, 'REDS_raw_test')
+            self.dir_lr = os.path.join(self.apath, 'REDS_crf'+self.crf+'_raw_test')
         
 

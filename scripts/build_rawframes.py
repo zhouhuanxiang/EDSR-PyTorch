@@ -49,17 +49,17 @@ def parse_args():
     return args
 
 '''
-nphup \
-python /home1/zhx/video-restoration/scripts/build_rawframes.py --env lab --path HD_UGC_crf25 HD_UGC_crf45 REDS_crf25 REDS_crf45 \
+
+nohup \
+python /home1/zhx/video-restoration/codes/EDSR-PyTorch/scripts/build_rawframes.py --path HD_UGC HD_UGC_crf30 HD_UGC_crf35 HD_UGC_crf40 REDS REDS_crf30 REDS_crf35 REDS_crf40  \
 > /home1/zhx/ffmpeg 2>&1 &
 
-python build_rawframes.py --path HD_UGC_crf25 HD_UGC_crf45
 '''
 
 if __name__ == '__main__':
     args = parse_args()
     
-    mode = 'lab' if socket.gethostname() == 'user-ubuntu' else 'kwai'
+    mode = 'lab' if socket.gethostname() == 'user-ubuntu' or socket.gethostname() == 'ubuntu' else 'kwai'
     if mode == 'kwai':
         prefix = '/media/disk5/fordata/web_server/zhouhuanxiang/data'
         ffmpeg = '/usr/local/share/ffmpeg_qlh/bin/ffmpeg '
