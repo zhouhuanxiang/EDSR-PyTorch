@@ -67,6 +67,7 @@ class Trainer():
                     timer_data.release()))
 
             timer_data.tic()
+            # break
 
         self.loss.end_log(len(self.loader_train))
         self.error_last = self.loss.log[-1, -1]

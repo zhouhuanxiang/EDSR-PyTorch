@@ -5,6 +5,7 @@ import torch
 import torch.nn as nn
 import torch.nn.parallel as P
 import torch.utils.model_zoo
+from torch.autograd import Variable
 
 class Model(nn.Module):
     def __init__(self, args, ckp):
@@ -106,64 +107,124 @@ class Model(nn.Module):
         if load_from:
             self.model.load_state_dict(load_from, strict=False)
 
-    def forward_chop(self, *args, shave=10, min_size=160000):
-        scale = 1 if self.input_large else self.scale[self.idx_scale]
+    # def forward_chop(self, *args, shave=10, min_size=160000):
+    #     scale = 1 if self.input_large else self.scale[self.idx_scale]
+    #     n_GPUs = min(self.n_GPUs, 4)
+    #     # height, width
+    #     h, w = args[0].size()[-2:]
+
+    #     top = slice(0, h//2 + shave)
+    #     bottom = slice(h - h//2 - shave, h)
+    #     left = slice(0, w//2 + shave)
+    #     right = slice(w - w//2 - shave, w)
+    #     x_chops = [torch.cat([
+    #         a[..., top, left],
+    #         a[..., top, right],
+    #         a[..., bottom, left],
+    #         a[..., bottom, right]
+    #     ]) for a in args]
+
+    #     print('$$$$$$$$$$$$$')
+    #     print(len(x_chops))
+    #     print(x_chops[0].shape)
+        
+    #     y_chops = []
+    #     if h * w < 4 * min_size:
+    #         for i in range(0, 4, n_GPUs):
+    #             x = [x_chop[i:(i + n_GPUs)] for x_chop in x_chops]
+    #             y = P.data_parallel(self.model, *x, range(n_GPUs))
+    #             if not isinstance(y, list): y = [y]
+    #             if not y_chops:
+    #                 y_chops = [[c for c in _y.chunk(n_GPUs, dim=0)] for _y in y]
+    #             else:
+    #                 for y_chop, _y in zip(y_chops, y):
+    #                     y_chop.extend(_y.chunk(n_GPUs, dim=0))
+    #     else:
+    #         for p in zip(*x_chops):
+    #             y = self.forward_chop(*p, shave=shave, min_size=min_size)
+    #             if not isinstance(y, list): y = [y]
+    #             if not y_chops:
+    #                 y_chops = [[_y] for _y in y]
+    #             else:
+    #                 for y_chop, _y in zip(y_chops, y): y_chop.append(_y)
+
+    #     h *= scale
+    #     w *= scale
+    #     top = slice(0, h//2)
+    #     bottom = slice(h - h//2, h)
+    #     bottom_r = slice(h//2 - h, None)
+    #     left = slice(0, w//2)
+    #     right = slice(w - w//2, w)
+    #     right_r = slice(w//2 - w, None)
+
+    #     # batch size, number of color channels
+    #     b, c = y_chops[0][0].size()[:-2]
+    #     y = [y_chop[0].new(b, c, h, w) for y_chop in y_chops]
+    #     for y_chop, _y in zip(y_chops, y):
+    #         _y[..., top, left] = y_chop[0][..., top, left]
+    #         _y[..., top, right] = y_chop[1][..., top, right_r]
+    #         _y[..., bottom, left] = y_chop[2][..., bottom_r, left]
+    #         _y[..., bottom, right] = y_chop[3][..., bottom_r, right_r]
+
+    #     if len(y) == 1: y = y[0]
+
+    #     return y
+
+    def forward_chop(self, x, shave=10, min_size=10000):
+        scale = self.scale[self.idx_scale]
         n_GPUs = min(self.n_GPUs, 4)
-        # height, width
-        h, w = args[0].size()[-2:]
+        b, c, h, w = x.size()
+        #############################################
+        # adaptive shave
+        # corresponding to scaling factor of the downscaling and upscaling modules in the network
+        shave_scale = 4
+        # max shave size
+        shave_size_max = 12
+        # get half size of the hight and width
+        h_half, w_half = h // 2, w // 2
+        # mod
+        mod_h, mod_w = h_half // shave_scale, w_half // shave_scale
+        # ditermine midsize along height and width directions
+        h_size = mod_h * shave_scale + shave_size_max
+        w_size = mod_w * shave_scale + shave_size_max
+        #h_size, w_size = h_half + shave, w_half + shave
+        ###############################################
+        #h_size, w_size = adaptive_shave(h, w)
+        lr_list = [
+            x[:, :, 0:h_size, 0:w_size],
+            x[:, :, 0:h_size, (w - w_size):w],
+            x[:, :, (h - h_size):h, 0:w_size],
+            x[:, :, (h - h_size):h, (w - w_size):w]]
 
-        top = slice(0, h//2 + shave)
-        bottom = slice(h - h//2 - shave, h)
-        left = slice(0, w//2 + shave)
-        right = slice(w - w//2 - shave, w)
-        x_chops = [torch.cat([
-            a[..., top, left],
-            a[..., top, right],
-            a[..., bottom, left],
-            a[..., bottom, right]
-        ]) for a in args]
-
-        y_chops = []
-        if h * w < 4 * min_size:
+        if w_size * h_size < min_size:
+            sr_list = []
             for i in range(0, 4, n_GPUs):
-                x = [x_chop[i:(i + n_GPUs)] for x_chop in x_chops]
-                y = P.data_parallel(self.model, *x, range(n_GPUs))
-                if not isinstance(y, list): y = [y]
-                if not y_chops:
-                    y_chops = [[c for c in _y.chunk(n_GPUs, dim=0)] for _y in y]
-                else:
-                    for y_chop, _y in zip(y_chops, y):
-                        y_chop.extend(_y.chunk(n_GPUs, dim=0))
+                lr_batch = torch.cat(lr_list[i:(i + n_GPUs)], dim=0)
+                sr_batch = self.model(lr_batch)
+                sr_list.extend(sr_batch.chunk(n_GPUs, dim=0))
         else:
-            for p in zip(*x_chops):
-                y = self.forward_chop(*p, shave=shave, min_size=min_size)
-                if not isinstance(y, list): y = [y]
-                if not y_chops:
-                    y_chops = [[_y] for _y in y]
-                else:
-                    for y_chop, _y in zip(y_chops, y): y_chop.append(_y)
+            sr_list = [
+                self.forward_chop(patch, shave=shave, min_size=min_size) \
+                for patch in lr_list
+            ]
 
-        h *= scale
-        w *= scale
-        top = slice(0, h//2)
-        bottom = slice(h - h//2, h)
-        bottom_r = slice(h//2 - h, None)
-        left = slice(0, w//2)
-        right = slice(w - w//2, w)
-        right_r = slice(w//2 - w, None)
+        h, w = scale * h, scale * w
+        h_half, w_half = scale * h_half, scale * w_half
+        h_size, w_size = scale * h_size, scale * w_size
+        shave *= scale
 
-        # batch size, number of color channels
-        b, c = y_chops[0][0].size()[:-2]
-        y = [y_chop[0].new(b, c, h, w) for y_chop in y_chops]
-        for y_chop, _y in zip(y_chops, y):
-            _y[..., top, left] = y_chop[0][..., top, left]
-            _y[..., top, right] = y_chop[1][..., top, right_r]
-            _y[..., bottom, left] = y_chop[2][..., bottom_r, left]
-            _y[..., bottom, right] = y_chop[3][..., bottom_r, right_r]
+        with torch.no_grad():
+            output = Variable(x.data.new(b, c, h, w), volatile=True)
+            output[:, :, 0:h_half, 0:w_half] \
+                = sr_list[0][:, :, 0:h_half, 0:w_half]
+            output[:, :, 0:h_half, w_half:w] \
+                = sr_list[1][:, :, 0:h_half, (w_size - w + w_half):w_size]
+            output[:, :, h_half:h, 0:w_half] \
+                = sr_list[2][:, :, (h_size - h + h_half):h_size, 0:w_half]
+            output[:, :, h_half:h, w_half:w] \
+                = sr_list[3][:, :, (h_size - h + h_half):h_size, (w_size - w + w_half):w_size]
 
-        if len(y) == 1: y = y[0]
-
-        return y
+        return output
 
     def forward_x8(self, *args, forward_function=None):
         def _transform(v, op):
