@@ -51,23 +51,23 @@ if __name__ == '__main__':
         if mode == 'lab':
             video_folder = '/home1/zhx/video-restoration/data/HD_UGC'
             result_src_folders = [
-                # '/home1/zhx/log/'+model+'/results-REDS',
+                # '/home1/zhx/log/'+model+'/results-REDS-crf'+args.crf[i],
                 '/home1/zhx/log/'+model+'/results-KWAIVIDEO-crf'+args.crf[i],
             ]
             result_dst_folders = [
-                # '/home1/zhx/log/'+model+'/videos-REDS/',
+                # '/home1/zhx/log/'+model+'/videos-REDS-crf'+args.crf[i],
                 '/home1/zhx/log/'+model+'/videos-KWAIVIDEO-crf'+args.crf[i],
             ]
             ffmpeg = 'ffmpeg '
         else:
             video_folder = '/media/disk5/fordata/web_server/zhouhuanxiang/data/HD_UGC'
             result_src_folders = [
-                # '/media/disk5/fordata/web_server/zhouhuanxiang/log/'+model+'/results-REDS',
-                '/media/disk5/fordata/web_server/zhouhuanxiang/log/'+model+'/results-KWAIVIDEO',
+                # '/media/disk5/fordata/web_server/zhouhuanxiang/log/'+model+'/results-REDS-crf'+args.crf[i],
+                '/media/disk5/fordata/web_server/zhouhuanxiang/log/'+model+'/results-KWAIVIDEO-crf'+args.crf[i],
             ]
             result_dst_folders = [
-                # '/media/disk5/fordata/web_server/zhouhuanxiang/log/'+model+'/videos-REDS',
-                '/media/disk5/fordata/web_server/zhouhuanxiang/log/'+model+'/videos-KWAIVIDEO',
+                # '/media/disk5/fordata/web_server/zhouhuanxiang/log/'+model+'/videos-REDS-crf'+args.crf[i],
+                '/media/disk5/fordata/web_server/zhouhuanxiang/log/'+model+'/videos-KWAIVIDEO-crf'+args.crf[i],
             ]
             ffmpeg = '/usr/local/share/ffmpeg_qlh/bin/ffmpeg '
 
