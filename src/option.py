@@ -148,6 +148,30 @@ parser.add_argument('--save_results', action='store_true',
 parser.add_argument('--save_gt', action='store_true',
                     help='save low-resolution and high-resolution images together')
 
+# For RNAN
+parser.add_argument('--noise_level', default='10',
+                    help='Gaussian noise std. added to the whole image')
+# parser.add_argument('--n_cab_1', type=int, default=20,
+#                     help='number of n1 channel attention blocks')
+# parser.add_argument('--reduction', type=int, default=16,
+#                     help='reduction in channel attention layer')
+# parser.add_argument('--n_resgroups', type=int, default=10,
+#                     help='number of residual groups')
+# parser.add_argument('--resnb_p', type=int, default=1,
+#                     help='pre-processing residual unit number')
+# parser.add_argument('--resnb_t', type=int, default=2,
+#                     help='residual unit number in trunk branch')                    
+# parser.add_argument('--resnb_r', type=int, default=1,
+#                     help='residual unit or conv layer number before downsample')
+# parser.add_argument('--stack_connect', action='store_true',
+#                     help='stacking connection between downsample and upsample')
+parser.add_argument('--testpath', type=str, default='../experiment/LQ',
+                    help='dataset directory for testing')
+parser.add_argument('--testset', type=str, default='Kodak24',
+                    help='dataset name for testing')
+
+
+
 args = parser.parse_args()
 template.set_template(args)
 

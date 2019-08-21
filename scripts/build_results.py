@@ -37,6 +37,8 @@ def parse_args():
     parser = argparse.ArgumentParser(description='extract raw frames')
     parser.add_argument('--models', nargs='+', 
                         help='tested models')
+    parser.add_argument('--data_crfs', nargs='+', 
+                        help='crfs of tested datasets')
     args = parser.parse_args()
 
     return args
@@ -45,16 +47,16 @@ if __name__ == '__main__':
     mode = 'lab' if socket.gethostname() == 'user-ubuntu' or socket.gethostname() == 'ubuntu' else 'kwai'
     args = parse_args()
     models = args.models
-    for model in models:
+    for i, model in enumerate(models):
         if mode == 'lab':
             video_folder = '/home1/zhx/video-restoration/data/HD_UGC'
             result_src_folders = [
                 # '/home1/zhx/log/'+model+'/results-REDS',
-                '/home1/zhx/log/'+model+'/results-KWAIVIDEO',
+                '/home1/zhx/log/'+model+'/results-KWAIVIDEO-crf'+args.crf[i],
             ]
             result_dst_folders = [
                 # '/home1/zhx/log/'+model+'/videos-REDS/',
-                '/home1/zhx/log/'+model+'/videos-KWAIVIDEO/'
+                '/home1/zhx/log/'+model+'/videos-KWAIVIDEO-crf'+args.crf[i],
             ]
             ffmpeg = 'ffmpeg '
         else:

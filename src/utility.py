@@ -46,6 +46,7 @@ class checkpoint():
         self.args = args
         self.ok = True
         self.log = torch.Tensor()
+        self.crf = args.crf
         now = datetime.datetime.now().strftime('%Y-%m-%d-%H:%M:%S')
 
         if not args.load:
@@ -148,11 +149,11 @@ class checkpoint():
     def save_results(self, dataset, videoname, filename, save_list, scale):
         if self.args.save_results:
             os.makedirs(self.get_path(
-                'results-{}'.format(dataset.dataset.name),
+                'results-{}-crf{}'.format(dataset.dataset.name, self.crf),
                 '{}'.format(videoname)
             ), exist_ok=True)
             filename = self.get_path(
-                'results-{}'.format(dataset.dataset.name),
+                'results-{}-crf{}'.format(dataset.dataset.name, self.crf),
                 '{}'.format(videoname),
                 '{}_x{}_'.format(filename, scale)
             )
