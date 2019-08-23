@@ -26,5 +26,6 @@ os.makedirs(dst_folder, exist_ok=True)
 for crf in ['', '_crf25', '_crf30', '_crf35', '_crf40', '_crf45']:
     os.makedirs(os.path.join(dst_folder, 'HD_UGC'+crf), exist_ok=True)
     for vid in test_video_ids:
-        os.system('mv '+os.path.join(src_folder, 'HD_UGC'+crf, vid+'.mp4')+' '+os.path.join(dst_folder, 'HD_UGC'+crf, vid+'.mp4'))
+        # os.system('mv '+os.path.join(src_folder, 'HD_UGC'+crf, vid+'.mp4')+' '+os.path.join(dst_folder, 'HD_UGC'+crf, vid+'.mp4'))
+        os.system('cp '+os.path.join(dst_folder, 'HD_UGC'+crf, vid+'.mp4 ')+os.path.join(src_folder, 'HD_UGC'+crf, vid+'.mp4'))
 

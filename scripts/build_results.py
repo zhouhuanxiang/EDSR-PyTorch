@@ -37,12 +37,17 @@ def parse_args():
     parser = argparse.ArgumentParser(description='extract raw frames')
     parser.add_argument('--models', nargs='+', 
                         help='tested models')
-    parser.add_argument('--data_crfs', nargs='+', 
+    parser.add_argument('--crf', nargs='+', 
                         help='crfs of tested datasets')
     args = parser.parse_args()
 
     return args
 
+"""
+python build_results.py \
+--models EDSR_r8_crf25 EDSR_r8_crf30 EDSR_r8_crf30 EDSR_r8_crf35 EDSR_r8_crf35 EDSR_r8_crf40 EDSR_r8_crf40 \
+--crf 30 25 35 30 40 35 45
+"""
 if __name__ == '__main__':
     mode = 'lab' if socket.gethostname() == 'user-ubuntu' or socket.gethostname() == 'ubuntu' else 'kwai'
     args = parse_args()
@@ -78,6 +83,8 @@ if __name__ == '__main__':
         for i, folder in enumerate(result_src_folders):
             for vname in test_video_ids[i]:
                 fps = os.popen(ffmpeg+"-i "+os.path.join(video_folder, vname)+".mp4 2>&1 | sed -n \"s/.*, \(.*\) fp.*/\\1/p\"").read()
+                print(os.path.join(video_folder, vname))
+                print(fps)
                 fps = round(float(fps))
                 path = os.path.join(result_src_folders[i], vname)
                 os.chdir(path)
