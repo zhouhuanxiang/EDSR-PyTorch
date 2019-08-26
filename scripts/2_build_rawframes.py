@@ -20,7 +20,7 @@ def dump_frames(vid_item):
         pass
 
     # Read frame by ffmpeg
-    os.system(ffmpeg+'-i '+full_path+' -vf fps=5 '+out_full_path+'/img_%05d.png -hide_banner')
+    os.system(ffmpeg+'-i '+full_path+' '+out_full_path+'/img_%05d.png -hide_banner')
     
     ## Read frames by opencv
     # video = cv2.VideoCapture(full_path) 
@@ -49,11 +49,8 @@ def parse_args():
     return args
 
 '''
-
-nohup \
-python /home1/zhx/video-restoration/codes/EDSR-PyTorch/scripts/build_rawframes.py --path HD_UGC HD_UGC_crf30 HD_UGC_crf35 HD_UGC_crf40 REDS REDS_crf30 REDS_crf35 REDS_crf40  \
-> /home1/zhx/ffmpeg 2>&1 &
-
+python /home1/zhx/video-restoration/codes/EDSR-PyTorch/scripts/2_build_rawframes.py --path HD_UGC HD_UGC_crf25 HD_UGC_crf30 HD_UGC_crf35 HD_UGC_crf40 HD_UGC_crf45
+python /home1/zhx/video-restoration/codes/EDSR-PyTorch/scripts/2_build_rawframes.py --path REDS REDS_crf25 REDS_crf30 REDS_crf35 REDS_crf40 REDS_crf45
 '''
 
 if __name__ == '__main__':
