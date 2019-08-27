@@ -49,32 +49,47 @@ python build_results.py \
 --crf 30 25 35 30 40 35 45
 """
 if __name__ == '__main__':
-    mode = 'lab' if socket.gethostname() == 'user-ubuntu' or socket.gethostname() == 'ubuntu' else 'kwai'
+    if socket.gethostname() == 'user-ubuntu':
+        mode = 'lab'
+    elif socket.gethostname() == 'ubuntu':
+        mode = 'lab'
+    elif socket.gethostname() == 'sd-bjpg-hg27.yz02':
+        mode = 'kwai27'
+    elif socket.gethostname() == 'bjfk-hg29.yz02':
+        mode = 'kwai29'
+    else:
+        print('new server!')
+
     args = parse_args()
     models = args.models
     for i, model in enumerate(models):
-        if mode == 'lab':
-            video_folder = '/home1/zhx/video-restoration/data/HD_UGC'
-            result_src_folders = [
-                # '/home1/zhx/log/'+model+'/results-REDS-crf'+args.crf[i],
-                '/home1/zhx/log/'+model+'/results-KWAIVIDEO-crf'+args.crf[i],
-            ]
-            result_dst_folders = [
-                # '/home1/zhx/log/'+model+'/videos-REDS-crf'+args.crf[i],
-                '/home1/zhx/log/'+model+'/videos-KWAIVIDEO-crf'+args.crf[i],
-            ]
-            ffmpeg = 'ffmpeg '
-        else:
+        if mode == 'kwai27':
             video_folder = '/media/disk5/fordata/web_server/zhouhuanxiang/data/HD_UGC'
             result_src_folders = [
-                # '/media/disk5/fordata/web_server/zhouhuanxiang/log/'+model+'/results-REDS-crf'+args.crf[i],
                 '/media/disk5/fordata/web_server/zhouhuanxiang/log/'+model+'/results-KWAIVIDEO-crf'+args.crf[i],
             ]
             result_dst_folders = [
-                # '/media/disk5/fordata/web_server/zhouhuanxiang/log/'+model+'/videos-REDS-crf'+args.crf[i],
                 '/media/disk5/fordata/web_server/zhouhuanxiang/log/'+model+'/videos-KWAIVIDEO-crf'+args.crf[i],
             ]
             ffmpeg = '/usr/local/share/ffmpeg_qlh/bin/ffmpeg '
+        elif mode == 'kwai29':
+            video_folder = '/media/disk1/fordata/web_server/zhouhuanxiang/data/HD_UGC'
+            result_src_folders = [
+                '/media/disk1/fordata/web_server/zhouhuanxiang/log/'+model+'/results-KWAIVIDEO-crf'+args.crf[i],
+            ]
+            result_dst_folders = [
+                '/media/disk1/fordata/web_server/zhouhuanxiang/log/'+model+'/videos-KWAIVIDEO-crf'+args.crf[i],
+            ]
+            ffmpeg = 'ffmpeg '
+        else:
+            video_folder = '/home1/zhx/video-restoration/data/HD_UGC'
+            result_src_folders = [
+                '/home1/zhx/log/'+model+'/results-KWAIVIDEO-crf'+args.crf[i],
+            ]
+            result_dst_folders = [
+                '/home1/zhx/log/'+model+'/videos-KWAIVIDEO-crf'+args.crf[i],
+            ]
+            ffmpeg = 'ffmpeg '
 
         for folder in result_dst_folders:
             os.makedirs(folder, exist_ok=True)

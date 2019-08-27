@@ -65,10 +65,23 @@ python 2_build_rawframes.py --path HD_UGC HD_UGC_crf25 HD_UGC_crf30 HD_UGC_crf35
 if __name__ == '__main__':
     args = parse_args()
     
-    mode = 'lab' if socket.gethostname() == 'user-ubuntu' or socket.gethostname() == 'ubuntu' else 'kwai'
-    if mode == 'kwai':
+    if socket.gethostname() == 'user-ubuntu':
+        mode = 'lab'
+    elif socket.gethostname() == 'ubuntu':
+        mode = 'lab'
+    elif socket.gethostname() == 'sd-bjpg-hg27.yz02':
+        mode = 'kwai27'
+    elif socket.gethostname() == 'bjfk-hg29.yz02':
+        mode = 'kwai29'
+    else:
+        print('new server!')
+
+    if mode == 'kwai27':
         prefix = '/media/disk5/fordata/web_server/zhouhuanxiang/data'
         ffmpeg = '/usr/local/share/ffmpeg_qlh/bin/ffmpeg '
+    if mode == 'kwai29':
+        prefix = '/media/disk1/fordata/web_server/zhouhuanxiang/data'
+        ffmpeg = 'ffmpeg '
     else:
         prefix = '../../../data'
         ffmpeg = 'ffmpeg '
