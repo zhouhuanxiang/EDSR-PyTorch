@@ -108,6 +108,7 @@ class SRData(data.Dataset):
         return pair_t[0], pair_t[1], videoname, filename
 
     def __len__(self):
+        return len(self.images_hr)
         if self.train:
             return len(self.images_hr) * self.repeat
         else:

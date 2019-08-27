@@ -32,6 +32,14 @@ def dump_frames(vid_item):
     #     success, frame = video.read()
     #     count += 1
 
+    # clean
+    imgs_path = glob.glob(os.path.join(out_full_path, '*.png'))
+    imgs_path.sort()
+    imgs_path_1 = imgs_path[0::5]
+    imgs_path_2 = list(set(imgs_path) - set(imgs_path_1))
+    for i in imgs_path_2:
+        os.system('rm ' + i)
+
     print('video {} extracted'.format(vid_name))
     sys.stdout.flush()
     return True
@@ -49,8 +57,9 @@ def parse_args():
     return args
 
 '''
-python /home1/zhx/video-restoration/codes/EDSR-PyTorch/scripts/2_build_rawframes.py --path HD_UGC HD_UGC_crf25 HD_UGC_crf30 HD_UGC_crf35 HD_UGC_crf40 HD_UGC_crf45
-python /home1/zhx/video-restoration/codes/EDSR-PyTorch/scripts/2_build_rawframes.py --path REDS REDS_crf25 REDS_crf30 REDS_crf35 REDS_crf40 REDS_crf45
+python 2_build_rawframes.py --path REDS REDS_crf25 REDS_crf30 REDS_crf35 REDS_crf40 REDS_crf45
+
+python 2_build_rawframes.py --path HD_UGC HD_UGC_crf25 HD_UGC_crf30 HD_UGC_crf35 HD_UGC_crf40 HD_UGC_crf45
 '''
 
 if __name__ == '__main__':

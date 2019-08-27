@@ -21,8 +21,9 @@ class Trainer():
         self.loss = my_loss
         self.optimizer = utility.make_optimizer(args, self.model)
 
-        if self.args.load != '':
-            self.optimizer.load(ckp.dir, epoch=len(ckp.log))
+        if self.args.load != '' or self.args.resume == -1:
+            # self.optimizer.load(ckp.dir, epoch=len(ckp.log))
+            self.optimizer.load(ckp.dir, epoch=args.last_epoch)
 
         self.error_last = 1e8
         #

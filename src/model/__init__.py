@@ -81,6 +81,7 @@ class Model(nn.Module):
             kwargs = {'map_location': lambda storage, loc: storage}
 
         if resume == -1:
+            print('load model from {}'.format(os.path.join(apath, 'model_latest.pt')))
             load_from = torch.load(
                 os.path.join(apath, 'model_latest.pt'),
                 **kwargs

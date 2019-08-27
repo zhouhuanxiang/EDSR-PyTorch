@@ -34,19 +34,19 @@ test_video_ids = [
 dataset_dirs = [
     [
         'REDS',
-        # 'REDS_crf25',
+        'REDS_crf25',
         'REDS_crf30',
         'REDS_crf35',
         'REDS_crf40',
-        # 'REDS_crf45',
+        'REDS_crf45',
     ],
     [
         'HD_UGC',
-        # 'HD_UGC_crf25',
+        'HD_UGC_crf25',
         'HD_UGC_crf30',
         'HD_UGC_crf35',
         'HD_UGC_crf40',
-        # 'HD_UGC_crf45',
+        'HD_UGC_crf45',
     ]
 ]
 

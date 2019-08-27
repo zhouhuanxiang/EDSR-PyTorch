@@ -13,8 +13,8 @@ else:
     ffmpeg = 'ffmpeg '
 
 #  l1 loss 
-for crf in [30, 30, 35, 40, 45]:
-    path0 = os.path.join(prefix, 'HD_UGC_crf25_raw')
+for crf in [25, 30, 35, 40, 45]:
+    path0 = os.path.join(prefix, 'HD_UGC_raw')
     path1 = os.path.join(prefix, 'HD_UGC_crf'+str(crf)+'_raw')
 
     files0 = glob.glob(os.path.join(path0, '*', '*.png'))
