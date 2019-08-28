@@ -214,4 +214,5 @@ elif mode == 'kwai29':
     args.dir_data = '/media/disk1/fordata/web_server/zhouhuanxiang/data'
     args.save = '/media/disk1/fordata/web_server/zhouhuanxiang/log/{}_r{}_crf{}'.format(args.model, args.n_resblocks, args.crf)
 
-
+if args.resume == -1:
+    args.load = args.save

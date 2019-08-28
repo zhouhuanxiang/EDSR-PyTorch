@@ -22,8 +22,8 @@ class Trainer():
         self.optimizer = utility.make_optimizer(args, self.model)
 
         if self.args.load != '' or self.args.resume == -1:
-            # self.optimizer.load(ckp.dir, epoch=len(ckp.log))
-            self.optimizer.load(ckp.dir, epoch=args.last_epoch)
+            self.optimizer.load(ckp.dir, epoch=len(ckp.log))
+            # self.optimizer.load(ckp.dir, epoch=args.last_epoch)
 
         self.error_last = 1e8
         #
@@ -78,7 +78,7 @@ class Trainer():
         torch.set_grad_enabled(False)
 
         epoch = self.optimizer.get_last_epoch()
-        self.ckp.write_log('\nEvaluation:')
+        self.ckp.write_log('\nEvaluation [Epoch {}]:'.format(epoch))
         self.ckp.add_log(
             torch.zeros(1, len(self.loader_test), len(self.scale))
         )
