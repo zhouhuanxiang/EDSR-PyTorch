@@ -1,5 +1,6 @@
 import argparse
 import template
+import socket
 
 parser = argparse.ArgumentParser(description='EDSR and MDSR')
 
@@ -34,9 +35,9 @@ parser.add_argument('--data_test', type=str, default='DIV2K',
                     help='test dataset name')
 parser.add_argument('--data_range', type=str, default='1-800/801-810',
                     help='train/test data range')
-parser.add_argument('--ext', type=str, default='sep',
+parser.add_argument('--ext', type=str, default='img',
                     help='dataset file extension')
-parser.add_argument('--scale', type=str, default='4',
+parser.add_argument('--scale', type=str, default='1',
                     help='super resolution scale')
 parser.add_argument('--patch_size', type=int, default=192,
                     help='output patch size')
@@ -190,4 +191,27 @@ for arg in vars(args):
         vars(args)[arg] = True
     elif vars(args)[arg] == 'False':
         vars(args)[arg] = False
+
+# modify dir_data and save
+if socket.gethostname() == 'user-ubuntu':
+    mode = 'lab'
+elif socket.gethostname() == 'ubuntu':
+    mode = 'lab'
+elif socket.gethostname() == 'sd-bjpg-hg27.yz02':
+    mode = 'kwai27'
+elif socket.gethostname() == 'bjfk-hg29.yz02':
+    mode = 'kwai29'
+else:
+    print('new server!')
+
+if mode == 'lab':
+    args.dir_data = '/home1/zhx/video-restoration/data'
+    args.save = '/home1/zhx/log/{}_r{}_crf{}'.format(args.model, args.n_resblocks, args.crf)
+elif mode == 'kwai27':
+    args.dir_data = '/media/disk5/fordata/web_server/zhouhuanxiang/data'
+    args.save = '/media/disk5/fordata/web_server/zhouhuanxiang/log/{}_r{}_crf{}'.format(args.model, args.n_resblocks, args.crf)
+elif mode == 'kwai29':
+    args.dir_data = '/media/disk1/fordata/web_server/zhouhuanxiang/data'
+    args.save = '/media/disk1/fordata/web_server/zhouhuanxiang/log/{}_r{}_crf{}'.format(args.model, args.n_resblocks, args.crf)
+
 

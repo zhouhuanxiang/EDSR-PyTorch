@@ -30,8 +30,8 @@ class KWAIVIDEO(srdata.SRData):
         for si, s in enumerate(self.scale):
             names_lr[si] = sorted([i.replace('HD_UGC_raw', 'HD_UGC_crf'+self.crf+'_raw') for i in names_hr])
         if not self.train and not self.test_only:
-            names_hr = names_hr[:100]
-            names_lr = names_lr[:100]
+            names_hr = names_hr[500:3500:500]
+            names_lr[0] = names_lr[0][500:3500:500]
         print("######## KWAIVIDEO dataset size {} ########".format(len(names_hr)))
         return names_hr, names_lr
 
