@@ -106,6 +106,10 @@ class Loss(nn.modules.loss._Loss):
 
     def plot_loss(self, apath, epoch):
         axis = np.linspace(1, epoch, epoch)
+        if self.loss.shape[0] < axis.shape[0]:
+            diff = self.loss.shape[0] - axis.shape[0]
+            diff = torch.zeros((diff, self.loss.shape[1]))
+            self.loss = torch.cat((diff, self.loss), 0)
         for i, l in enumerate(self.loss):
             label = '{} Loss'.format(l['type'])
             fig = plt.figure()
