@@ -44,9 +44,13 @@ def parse_args():
     return args
 
 """
-python build_results.py \
---models EDSR_r8_crf25 EDSR_r8_crf30 EDSR_r8_crf30 EDSR_r8_crf35 EDSR_r8_crf35 EDSR_r8_crf40 EDSR_r8_crf40 \
---crf 30 25 35 30 40 35 45
+python 4_build_results.py \
+--models EDSR_r16_crf25 EDSR_r16_crf30 EDSR_r16_crf35 EDSR_r16_crf40 EDSR_r16_crf45 \
+--crf 25 30 35 40 45
+
+python 4_build_results.py \
+--models RCAN_r16_crf35 RCAN_r16_crf45 \
+--crf 35 45
 """
 if __name__ == '__main__':
     if socket.gethostname() == 'user-ubuntu':
@@ -62,51 +66,59 @@ if __name__ == '__main__':
 
     args = parse_args()
     models = args.models
-    for i, model in enumerate(models):
+    for ii, model in enumerate(models):
         if mode == 'kwai27':
             video_folder = '/media/disk5/fordata/web_server/zhouhuanxiang/data/HD_UGC'
             result_src_folders = [
-                '/media/disk5/fordata/web_server/zhouhuanxiang/log/'+model+'/results-KWAIVIDEO-crf'+args.crf[i],
+                '/media/disk5/fordata/web_server/zhouhuanxiang/log/'+model+'/results-KWAIVIDEO-crf'+args.crf[ii],
             ]
             result_dst_folders = [
-                '/media/disk5/fordata/web_server/zhouhuanxiang/log/'+model+'/videos-KWAIVIDEO-crf'+args.crf[i],
+                '/media/disk5/fordata/web_server/zhouhuanxiang/log/'+model+'/videos-KWAIVIDEO-crf'+args.crf[ii],
             ]
             ffmpeg = '/usr/local/share/ffmpeg_qlh/bin/ffmpeg '
         elif mode == 'kwai29':
             video_folder = '/media/disk1/fordata/web_server/zhouhuanxiang/data/HD_UGC'
             result_src_folders = [
-                '/media/disk1/fordata/web_server/zhouhuanxiang/log/'+model+'/results-KWAIVIDEO-crf'+args.crf[i],
+                '/media/disk1/fordata/web_server/zhouhuanxiang/log/'+model+'/results-KWAIVIDEO-crf'+args.crf[ii],
             ]
             result_dst_folders = [
-                '/media/disk1/fordata/web_server/zhouhuanxiang/log/'+model+'/videos-KWAIVIDEO-crf'+args.crf[i],
+                '/media/disk1/fordata/web_server/zhouhuanxiang/log/'+model+'/videos-KWAIVIDEO-crf'+args.crf[ii],
             ]
-            ffmpeg = 'ffmpeg '
+            ffmpeg = 'ffmpeg ' 
         else:
             video_folder = '/home1/zhx/video-restoration/data/HD_UGC'
             result_src_folders = [
-                '/home1/zhx/log/'+model+'/results-KWAIVIDEO-crf'+args.crf[i],
+                '/home1/zhx/log/'+model+'/results-KWAIVIDEO-crf'+args.crf[ii],
             ]
             result_dst_folders = [
-                '/home1/zhx/log/'+model+'/videos-KWAIVIDEO-crf'+args.crf[i],
+                '/home1/zhx/log/'+model+'/videos-KWAIVIDEO-crf'+args.crf[ii],
             ]
             ffmpeg = 'ffmpeg '
 
         for folder in result_dst_folders:
+            if os.path.exists(folder):
+                os.system('rm -rf '+folder)
             os.makedirs(folder, exist_ok=True)
+            if os.path.exists(folder+'_tmp'):
+                os.system('rm -rf '+folder+'_tmp')
+            os.makedirs(folder+'_tmp', exist_ok=True)
 
         path_now = os.getcwd()
-        for i, folder in enumerate(result_src_folders):
-            for vname in test_video_ids[i]:
+        for jj, folder in enumerate(result_src_folders):
+            for vname in test_video_ids[jj]:
                 fps = os.popen(ffmpeg+"-i "+os.path.join(video_folder, vname)+".mp4 2>&1 | sed -n \"s/.*, \(.*\) fp.*/\\1/p\"").read()
-                print(os.path.join(video_folder, vname))
-                print(fps)
                 fps = round(float(fps))
-                path = os.path.join(result_src_folders[i], vname)
+                path = os.path.join(result_src_folders[jj], vname)
                 os.chdir(path)
-                # print(ffmpeg+"-i "+os.path.join(video_folder, vname)+".mp4 2>&1 | sed -n \"s/.*, \(.*\) fp.*/\\1/p\"")
-                # print(round(float(os.system(ffmpeg+"-i "+os.path.join(video_folder, vname)+".mp4 2>&1 | sed -n \"s/.*, \(.*\) fp.*/\\1/p\""))))
                 print(path, fps)
-                # os.system(ffmpeg+'-r '+fps+'-i img_%5d_x1_GT.png -movflags +faststart -max_interleave_delta 150000000 -max_muxing_queue_size 9999 -c:v libx265 -psnr -threads 6 -preset fast -c:a copy -profile:a aac_he -ac 2 -x265-params lossless=1  -tag:v hvc1  -pix_fmt yuv420p -y '+os.path.join(result_dst_folders[i], vname+'_high.mp4'))
-                # os.system(ffmpeg+'-r '+fps+'-i img_%5d_x1_Compressed.png -movflags +faststart -max_interleave_delta 150000000 -max_muxing_queue_size 9999 -c:v libx265 -psnr -threads 6 -preset fast -c:a copy -profile:a aac_he -ac 2 -x265-params lossless=1  -tag:v hvc1  -pix_fmt yuv420p -y '+os.path.join(result_dst_folders[i], vname+'_high.mp4'))
-                os.system(ffmpeg+'-r '+str(fps)+' -i img_%5d_x1_Result.png -movflags +faststart -max_interleave_delta 150000000 -max_muxing_queue_size 9999 -c:v libx265 -psnr -threads 6 -preset fast -c:a copy -profile:a aac_he -ac 2 -x265-params lossless=1  -tag:v hvc1  -pix_fmt yuv420p -y '+os.path.join(result_dst_folders[i], vname+'.mp4'))
+
+                # path0 = os.path.join(video_folder, vname+'.mp4')
+                path0 = os.path.join(video_folder+'_crf'+str(args.crf[ii]), vname+'.mp4')
+                path1 = os.path.join(result_dst_folders[jj]+'_tmp', vname+'_tmp.mp4')
+                path2 = os.path.join(result_dst_folders[jj], vname+'.mp4')
+                os.system(ffmpeg+'-r '+str(fps)+' -i img_%5d_x1_Result.png -movflags +faststart -max_interleave_delta 150000000 -max_muxing_queue_size 9999 -c:v libx265 -psnr -threads 6 -preset fast -c:a copy -profile:a aac_he -ac 2 -x265-params lossless=1  -tag:v hvc1  -pix_fmt yuv420p -y '+path1)
+                os.system(ffmpeg+'-i '+path0+' -i '+path1+' -filter_complex "[0:v:0]pad=iw*2:ih[bg]; [bg][1:v:0]overlay=w" -qp 10 '+path2)
+                os.system('rm '+path1)
         os.chdir(path_now)
+
+        # zip -r /home1/zhx/1.zip /home1/zhx/log/EDSR_r16_crf25/videos-KWAIVIDEO-crf25 /home1/zhx/log/EDSR_r16_crf30/videos-KWAIVIDEO-crf30 /home1/zhx/log/EDSR_r16_crf35/videos-KWAIVIDEO-crf35 /home1/zhx/log/EDSR_r16_crf40/videos-KWAIVIDEO-crf40 /home1/zhx/log/EDSR_r16_crf45/videos-KWAIVIDEO-crf45
