@@ -44,7 +44,7 @@ CUDA_VISIBLE_DEVICES=5 nohup python /home1/zhx/video-restoration/codes/EDSR-PyTo
 # lab 18
 # EDSR 25 30 35 40 45
 
-CUDA_VISIBLE_DEVICES=3 python /home1/zhx/video-restoration/codes/EDSR-PyTorch/src/main.py \
+CUDA_VISIBLE_DEVICES=1 python /home1/zhx/video-restoration/codes/EDSR-PyTorch/src/main.py \
 --data_train KWAIVIDEO+REDS \
 --data_test KWAIVIDEO+REDS \
 --crf 25 \
@@ -52,6 +52,8 @@ CUDA_VISIBLE_DEVICES=3 python /home1/zhx/video-restoration/codes/EDSR-PyTorch/sr
 --batch_size 8 \
 --model EDSR \
 --resume -1
+--test_only \
+--save_results
 
 CUDA_VISIBLE_DEVICES=1 nohup python /home1/zhx/video-restoration/codes/EDSR-PyTorch/src/main.py \
 --data_train KWAIVIDEO+REDS \

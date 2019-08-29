@@ -99,6 +99,12 @@ class Model(nn.Module):
             elif pre_train:
                 print('Load the model from {}'.format(pre_train))
                 load_from = torch.load(pre_train, **kwargs)
+        elif resume == -2:
+            print('load model from {}'.format(os.path.join(apath, 'model_best.pt')))
+            load_from = torch.load(
+                os.path.join(apath, 'model_best.pt'),
+                **kwargs
+            )
         else:
             load_from = torch.load(
                 os.path.join(apath, 'model_{}.pt'.format(resume)),
