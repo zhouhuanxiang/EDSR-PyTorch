@@ -118,7 +118,14 @@ if __name__ == '__main__':
                 path2 = os.path.join(result_dst_folders[jj], vname+'.mp4')
                 os.system(ffmpeg+'-r '+str(fps)+' -i img_%5d_x1_Result.png -movflags +faststart -max_interleave_delta 150000000 -max_muxing_queue_size 9999 -c:v libx265 -psnr -threads 6 -preset fast -c:a copy -profile:a aac_he -ac 2 -x265-params lossless=1  -tag:v hvc1  -pix_fmt yuv420p -y '+path1)
                 os.system(ffmpeg+'-i '+path0+' -i '+path1+' -filter_complex "[0:v:0]pad=iw*2:ih[bg]; [bg][1:v:0]overlay=w" -qp 10 '+path2)
-                os.system('rm '+path1)
+                # os.system('rm '+path1)
         os.chdir(path_now)
 
         # zip -r /home1/zhx/1.zip /home1/zhx/log/EDSR_r16_crf25/videos-KWAIVIDEO-crf25 /home1/zhx/log/EDSR_r16_crf30/videos-KWAIVIDEO-crf30 /home1/zhx/log/EDSR_r16_crf35/videos-KWAIVIDEO-crf35 /home1/zhx/log/EDSR_r16_crf40/videos-KWAIVIDEO-crf40 /home1/zhx/log/EDSR_r16_crf45/videos-KWAIVIDEO-crf45
+
+
+'''
+zip -r /home1/zhx/1.zip /home1/zhx/log/EDSR_r16_crf25/videos-KWAIVIDEO-crf25 /home1/zhx/log/EDSR_r16_crf30/videos-KWAIVIDEO-crf30 /home1/zhx/log/EDSR_r16_crf35/videos-KWAIVIDEO-crf35 /home1/zhx/log/EDSR_r16_crf40/videos-KWAIVIDEO-crf40 /home1/zhx/log/EDSR_r16_crf45/videos-KWAIVIDEO-crf45
+
+zip -r ~/zhouhuanxiang/1.zip /media/disk5/fordata/web_server/zhouhuanxiang/log/RCAN_r16_crf35/videos-KWAIVIDEO-crf35 /media/disk5/fordata/web_server/zhouhuanxiang/log/RCAN_r16_crf45/videos-KWAIVIDEO-crf45 
+'''

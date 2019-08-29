@@ -1,27 +1,31 @@
 # lab 36
 # RCAN 30 40
 # RNAN 30 40
-CUDA_VISIBLE_DEVICES=0 python /home1/zhx/video-restoration/codes/EDSR-PyTorch/src/main.py \
+CUDA_VISIBLE_DEVICES=0 python ~/zhouhuanxiang/EDSR-PyTorch/src/main.py \
 --data_train KWAIVIDEO+REDS \
 --data_test KWAIVIDEO+REDS \
 --crf 30 \
 --patch_size 80 \
 --batch_size 8 \
 --model RCAN \
---chop \
-> /home1/zhx/RCAN_r10r16_crf30 2>&1 &
+--resume -2 \
+--test_only \
+--save_results \
+> ~/zhouhuanxiang/tRCAN_r10r16_crf30 2>&1 &
 
-CUDA_VISIBLE_DEVICES=5 nohup python /home1/zhx/video-restoration/codes/EDSR-PyTorch/src/main.py \
+CUDA_VISIBLE_DEVICES=1 nohup python ~/zhouhuanxiang/EDSR-PyTorch/src/main.py \
 --data_train KWAIVIDEO+REDS \
 --data_test KWAIVIDEO+REDS \
 --crf 40 \
 --patch_size 80 \
 --batch_size 8 \
 --model RCAN \
---chop \
-> /home1/zhx/RCAN_r10r16_crf40 2>&1 &
+--resume -2 \
+--test_only \
+--save_results \
+> ~/zhouhuanxiang/tRCAN_r10r16_crf40 2>&1 &
 
-CUDA_VISIBLE_DEVICES=5 nohup python /home1/zhx/video-restoration/codes/EDSR-PyTorch/src/main.py \
+CUDA_VISIBLE_DEVICES=2 nohup python ~/zhouhuanxiang/EDSR-PyTorch/src/main.py \
 --data_train KWAIVIDEO+REDS \
 --data_test KWAIVIDEO+REDS \
 --crf 30 \
@@ -29,9 +33,12 @@ CUDA_VISIBLE_DEVICES=5 nohup python /home1/zhx/video-restoration/codes/EDSR-PyTo
 --batch_size 8 \
 --model RNAN \
 --chop \
-> /home1/zhx/RNAN_r10_crf30 2>&1 &
+--resume -2 \
+--test_only \
+--save_results \
+> ~/zhouhuanxiang/tRNAN_r10_crf30 2>&1 &
 
-CUDA_VISIBLE_DEVICES=5 nohup python /home1/zhx/video-restoration/codes/EDSR-PyTorch/src/main.py \
+CUDA_VISIBLE_DEVICES=3 nohup python ~/zhouhuanxiang/EDSR-PyTorch/src/main.py \
 --data_train KWAIVIDEO+REDS \
 --data_test KWAIVIDEO+REDS \
 --crf 40 \
@@ -39,7 +46,10 @@ CUDA_VISIBLE_DEVICES=5 nohup python /home1/zhx/video-restoration/codes/EDSR-PyTo
 --batch_size 8 \
 --model RNAN \
 --chop \
-> /home1/zhx/RNAN_r10_crf40 2>&1 &
+--resume -2 \
+--test_only \
+--save_results \
+> ~/zhouhuanxiang/tRNAN_r10_crf40 2>&1 &
 
 # lab 18
 # EDSR 25 30 35 40 45
@@ -139,6 +149,7 @@ CUDA_VISIBLE_DEVICES=2 nohup python ~/zhouhuanxiang/EDSR-PyTorch/src/main.py \
 --patch_size 80 \
 --batch_size 6 \
 --model RNAN \
+--chop \
 --resume -2 \
 --test_only \
 --save_results \
@@ -152,6 +163,7 @@ python ~/zhouhuanxiang/EDSR-PyTorch/src/main.py \
 --patch_size 80 \
 --batch_size 6 \
 --model RNAN \
+--chop \
 --resume -2 \
 --test_only \
 --save_results \
@@ -165,6 +177,7 @@ python ~/zhouhuanxiang/EDSR-PyTorch/src/main.py \
 --patch_size 80 \
 --batch_size 6 \
 --model RNAN \
+--chop \
 --resume -2 \
 --test_only \
 --save_results \
