@@ -146,23 +146,43 @@ class checkpoint():
         while not self.queue.empty(): time.sleep(1)
         for p in self.process: p.join()
 
-    def save_results(self, dataset, videoname, filename, save_list, scale):
+    def save_results(self, dataset, videonames, filenames, save_list, scale):
         if self.args.save_results:
-            os.makedirs(self.get_path(
+            for vname in videonames:
+                os.makedirs(self.get_path(
                 'results-{}-crf{}'.format(dataset.dataset.name, self.crf),
-                '{}'.format(videoname)
+                '{}'.format(vname)
             ), exist_ok=True)
-            filename = self.get_path(
-                'results-{}-crf{}'.format(dataset.dataset.name, self.crf),
-                '{}'.format(videoname),
-                '{}_x{}_'.format(filename, scale)
-            )
 
             postfix = ('Result', 'Compressed', 'GT')
             for v, p in zip(save_list, postfix):
-                normalized = v[0].mul(255 / self.args.rgb_range)
-                tensor_cpu = normalized.byte().permute(1, 2, 0).cpu()
-                self.queue.put(('{}{}.png'.format(filename, p), tensor_cpu))
+                for i, vv in enumerate(v):
+                    normalized = vv.mul(255 / self.args.rgb_range)
+                    tensor_cpu = normalized.byte().permute(1, 2, 0).cpu()
+                    filename = self.get_path(
+                        'results-{}-crf{}'.format(dataset.dataset.name, self.crf),
+                        '{}'.format(videonames[i]),
+                        '{}_x{}_'.format(filenames[i], scale)
+                    )
+                    self.queue.put(('{}{}.png'.format(filename, p), tensor_cpu))
+
+            # os.makedirs(self.get_path(
+            #     'results-{}-crf{}'.format(dataset.dataset.name, self.crf),
+            #     '{}'.format(videoname)
+            # ), exist_ok=True)
+            # filename = self.get_path(
+            #     'results-{}-crf{}'.format(dataset.dataset.name, self.crf),
+            #     '{}'.format(videoname),
+            #     '{}_x{}_'.format(filename, scale)
+            # )
+
+            # print(videoname, filename)
+
+            # postfix = ('Result', 'Compressed', 'GT')
+            # for v, p in zip(save_list, postfix):
+            #     normalized = v[0].mul(255 / self.args.rgb_range)
+            #     tensor_cpu = normalized.byte().permute(1, 2, 0).cpu()
+            #     self.queue.put(('{}{}.png'.format(filename, p), tensor_cpu))
 
 def quantize(img, rgb_range):
     pixel_range = 255 / rgb_range

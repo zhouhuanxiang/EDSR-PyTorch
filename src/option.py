@@ -1,12 +1,15 @@
 import argparse
 import template
 import socket
+import glob
 
 parser = argparse.ArgumentParser(description='EDSR and MDSR')
 
 # add by zhx
 parser.add_argument('--crf', type=str, default='25',
                     help='crf config')
+parser.add_argument('--log_name, type=str, default='',
+                    help='name of log folder')
 
 parser.add_argument('--debug', action='store_true',
                     help='Enables debug mode')
@@ -206,13 +209,14 @@ else:
 
 if mode == 'lab':
     args.dir_data = '/home1/zhx/video-restoration/data'
-    args.save = '/home1/zhx/log/{}_r{}_crf{}'.format(args.model, args.n_resblocks, args.crf)
+    args.save = '/home1/zhx/log/{}_crf{}_{}'.format(args.model, args.crf, args.log_name)
 elif mode == 'kwai27':
     args.dir_data = '/media/disk5/fordata/web_server/zhouhuanxiang/data'
-    args.save = '/media/disk5/fordata/web_server/zhouhuanxiang/log/{}_r{}_crf{}'.format(args.model, args.n_resblocks, args.crf)
+    args.save = '/media/disk5/fordata/web_server/zhouhuanxiang/log/{}_crf{}_{}'.format(args.model, args.crf, args.log_name)
 elif mode == 'kwai29':
     args.dir_data = '/media/disk1/fordata/web_server/zhouhuanxiang/data'
-    args.save = '/media/disk1/fordata/web_server/zhouhuanxiang/log/{}_r{}_crf{}'.format(args.model, args.n_resblocks, args.crf)
+    args.save = '/media/disk1/fordata/web_server/zhouhuanxiang/log/{}_crf{}_{}'.format(args.model, args.crf, args.log_name)
 
-if args.resume == -1:
+if args.resume == -1 or args.resume == -2:
     args.load = args.save
+

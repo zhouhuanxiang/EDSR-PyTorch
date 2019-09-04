@@ -102,7 +102,8 @@ class Trainer():
                         save_list.extend([lr, hr])
 
                     if self.args.save_results:
-                        self.ckp.save_results(d, videoname[0], filename[0], save_list, scale)
+                        # self.ckp.save_results(d, videoname[0], filename[0], save_list, scale)
+                        self.ckp.save_results(d, videoname, filename, save_list, scale)
 
                 self.ckp.log[-1, idx_data, idx_scale] /= len(d)
                 best = self.ckp.log.max(0)

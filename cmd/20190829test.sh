@@ -61,7 +61,7 @@ CUDA_VISIBLE_DEVICES=1 nohup python /home1/zhx/video-restoration/codes/EDSR-PyTo
 --patch_size 80 \
 --batch_size 8 \
 --model EDSR \
---resume -2 \
+--resume -1 \
 --test_only \
 --save_results \
 > /home1/zhx/tEDSR_r16_crf25 2>&1 &
@@ -73,7 +73,7 @@ CUDA_VISIBLE_DEVICES=1 nohup python /home1/zhx/video-restoration/codes/EDSR-PyTo
 --patch_size 80 \
 --batch_size 8 \
 --model EDSR \
---resume -2 \
+--resume -1 \
 --test_only \
 --save_results \
 > /home1/zhx/tEDSR_r16_crf30 2>&1 &
@@ -85,7 +85,7 @@ CUDA_VISIBLE_DEVICES=1 nohup python /home1/zhx/video-restoration/codes/EDSR-PyTo
 --patch_size 80 \
 --batch_size 8 \
 --model EDSR \
---resume -2 \
+--resume -1 \
 --test_only \
 --save_results \
 > /home1/zhx/tEDSR_r16_crf35 2>&1 &
@@ -97,7 +97,7 @@ CUDA_VISIBLE_DEVICES=2 nohup python /home1/zhx/video-restoration/codes/EDSR-PyTo
 --patch_size 80 \
 --batch_size 8 \
 --model EDSR \
---resume -2 \
+--resume -1 \
 --test_only \
 --save_results \
 > /home1/zhx/tEDSR_r16_crf40 2>&1 &
@@ -109,7 +109,7 @@ CUDA_VISIBLE_DEVICES=2 nohup python /home1/zhx/video-restoration/codes/EDSR-PyTo
 --patch_size 80 \
 --batch_size 8 \
 --model EDSR \
---resume -2 \
+--resume -1 \
 --test_only \
 --save_results \
 > /home1/zhx/tEDSR_r16_crf45 2>&1 &

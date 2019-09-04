@@ -11,7 +11,7 @@ import socket
 
 
 def dump_frames(vid_item):
-    full_path, vid_path, vid_id = vid_item
+    full_path, vid_path, vid_id, no_clean = vid_item
     vid_name = vid_path.split('.')[0]
     out_full_path = osp.join(out_dir, vid_name)
     try:
@@ -33,12 +33,13 @@ def dump_frames(vid_item):
     #     count += 1
 
     # clean
-    imgs_path = glob.glob(os.path.join(out_full_path, '*.png'))
-    imgs_path.sort()
-    imgs_path_1 = imgs_path[0::5]
-    imgs_path_2 = list(set(imgs_path) - set(imgs_path_1))
-    for i in imgs_path_2:
-        os.system('rm ' + i)
+    if not no_clean:
+        imgs_path = glob.glob(os.path.join(out_full_path, '*.png'))
+        imgs_path.sort()
+        imgs_path_1 = imgs_path[0::5]
+        imgs_path_2 = list(set(imgs_path) - set(imgs_path_1))
+        for i in imgs_path_2:
+            os.system('rm ' + i)
 
     print('video {} extracted'.format(vid_name))
     sys.stdout.flush()
@@ -48,9 +49,11 @@ def dump_frames(vid_item):
 def parse_args():
     parser = argparse.ArgumentParser(description='extract raw frames')
     parser.add_argument('--num_worker', type=int, default=8)
+    parser.add_argument('--no_clean', action='store_true',
+                        help='extract all frames')
     parser.add_argument('--path', nargs='+', 
                         help='path(s) of video folder to be extracted')
-    parser.add_argument("--ext", type=str, default='mp4', choices=['avi', 'mp4', 'webm'], 
+    parser.add_argument("--ext", type=str, default='mp4', choices=['avi', 'mp4', 'webm', 'flv'], 
                         help='video file extensions')
     args = parser.parse_args()
 
@@ -100,5 +103,4 @@ if __name__ == '__main__':
         vid_list = list(map(lambda p: p.split('/')[-1], fullpath_list))
 
         pool = Pool(args.num_worker)
-        pool.map(dump_frames, zip(
-                fullpath_list, vid_list, range(len(vid_list))))
+        pool.map(dump_frames, zip(fullpath_list, vid_list, range(len(vid_list)), [args.no_clean] * len(fullpath_list)))
