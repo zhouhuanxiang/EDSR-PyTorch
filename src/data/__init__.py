@@ -43,8 +43,8 @@ class Data:
             self.loader_test.append(MSDataLoader(
                 args,
                 testset,
-                # batch_size=1,
-                batch_size=args.batch_size,
+                batch_size=1,
+                # batch_size=args.batch_size,
                 shuffle=False,
                 pin_memory=not args.cpu
             ))

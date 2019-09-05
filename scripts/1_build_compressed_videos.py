@@ -36,7 +36,7 @@ if mode == 'kwai27':
 	prefix = '/media/disk5/fordata/web_server/zhouhuanxiang/data'
 	ffmpeg = '/usr/local/share/ffmpeg_qlh/bin/ffmpeg '
 	dest = '/media/disk5/fordata/web_server/zhouhuanxiang/data/'
-if mode == 'kwai29':
+elif mode == 'kwai29':
 	prefix = '/media/disk1/fordata/web_server/zhouhuanxiang/data'
 	ffmpeg = 'ffmpeg '
 	dest = '/media/disk1/fordata/web_server/zhouhuanxiang/data/'

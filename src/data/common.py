@@ -5,7 +5,7 @@ import skimage.color as sc
 
 import torch
 
-def get_patch(*args, patch_size=96, scale=2, multi=False, input_large=False):
+def get_patch(*args, patch_size=96, scale=2, multi=False, input_large=False, offset=[]):
     ih, iw = args[0].shape[:2]
 
     if not input_large:
@@ -16,8 +16,14 @@ def get_patch(*args, patch_size=96, scale=2, multi=False, input_large=False):
         tp = patch_size
         ip = patch_size
 
-    ix = random.randrange(0, iw - ip + 1)
-    iy = random.randrange(0, ih - ip + 1)
+    if len(offset):
+        origin_patchsize = 96 if patch_size == 80 else 230
+        ix = offset[0] + random.randrange(0, origin_patchsize - patch_size)
+        iy = offset[1] + random.randrange(0, origin_patchsize - patch_size)
+        # print(ix, iy, offset)
+    else:
+        ix = random.randrange(0, iw - ip + 1)
+        iy = random.randrange(0, ih - ip + 1)
 
     if not input_large:
         tx, ty = scale * ix, scale * iy

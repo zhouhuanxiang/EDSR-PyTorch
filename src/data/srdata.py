@@ -29,9 +29,10 @@ class SRData(data.Dataset):
             path_bin = os.path.join(self.apath, 'bin')
             os.makedirs(path_bin, exist_ok=True)
 
-        list_hr, list_lr = self._scan()
+        list_hr, list_lr, list_offset = self._scan()
         if args.ext.find('img') >= 0 or benchmark:
             self.images_hr, self.images_lr = list_hr, list_lr
+            self.image_offset = list_offset
         elif args.ext.find('sep') >= 0:
             # todo
             # change scale from [] -> int
@@ -100,15 +101,15 @@ class SRData(data.Dataset):
                 pickle.dump(imageio.imread(img), _f)
 
     def __getitem__(self, idx):
-        lr, hr, videoname, filename = self._load_file(idx)
-        pair = self.get_patch(lr, hr)
+        lr, hr, videoname, filename, offset = self._load_file(idx)
+        pair = self.get_patch(lr, hr, offset)
         pair = common.set_channel(*pair, n_channels=self.args.n_colors)
         pair_t = common.np2Tensor(*pair, rgb_range=self.args.rgb_range)
 
         return pair_t[0], pair_t[1], videoname, filename
 
     def __len__(self):
-        return len(self.images_hr)
+        return min(21210, len(self.images_hr))
         if self.train:
             return len(self.images_hr) * self.repeat
         else:
@@ -121,9 +122,12 @@ class SRData(data.Dataset):
             return idx
 
     def _load_file(self, idx):
+        idx = random.randint(0, len(self.images_hr))
         idx = self._get_index(idx)
         f_hr = self.images_hr[idx]
         f_lr = self.images_lr[self.idx_scale][idx]
+        offset = self.image_offset[idx] if len(self.image_offset) else []
+        # print(f_hr, f_lr, offset)
 
         videoname =  f_hr.split('/')[-2]
         filename, _ = os.path.splitext(os.path.basename(f_hr))
@@ -136,9 +140,9 @@ class SRData(data.Dataset):
             with open(f_lr, 'rb') as _f:
                 lr = pickle.load(_f)
 
-        return lr, hr, videoname, filename
+        return lr, hr, videoname, filename, offset
 
-    def get_patch(self, lr, hr):
+    def get_patch(self, lr, hr, offset):
         scale = self.scale[self.idx_scale]
         if self.train:
             lr, hr = common.get_patch(
@@ -146,7 +150,8 @@ class SRData(data.Dataset):
                 patch_size=self.args.patch_size,
                 scale=scale,
                 multi=(len(self.scale) > 1),
-                input_large=self.input_large
+                input_large=self.input_large,
+                offset=offset
             )
             if not self.args.no_augment: lr, hr = common.augment(lr, hr)
         else:

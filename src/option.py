@@ -8,7 +8,7 @@ parser = argparse.ArgumentParser(description='EDSR and MDSR')
 # add by zhx
 parser.add_argument('--crf', type=str, default='25',
                     help='crf config')
-parser.add_argument('--log_name, type=str, default='',
+parser.add_argument('--log_name', type=str, default='',
                     help='name of log folder')
 
 parser.add_argument('--debug', action='store_true',

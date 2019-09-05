@@ -82,7 +82,7 @@ if __name__ == '__main__':
     if mode == 'kwai27':
         prefix = '/media/disk5/fordata/web_server/zhouhuanxiang/data'
         ffmpeg = '/usr/local/share/ffmpeg_qlh/bin/ffmpeg '
-    if mode == 'kwai29':
+    elif mode == 'kwai29':
         prefix = '/media/disk1/fordata/web_server/zhouhuanxiang/data'
         ffmpeg = 'ffmpeg '
     else:
